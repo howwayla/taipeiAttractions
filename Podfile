@@ -8,6 +8,7 @@ inhibit_all_warnings!
 target 'taipeiAttractions' do
   pod 'Alamofire'
   pod 'ObjectMapper'
+  pod 'Nimble'
 
   target 'taipeiAttractionsTests' do
     inherit! :search_paths
