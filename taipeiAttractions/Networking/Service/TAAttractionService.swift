@@ -33,8 +33,10 @@ class TAAttractionService {
                         attractions.append(TAAttraction(JSON: item))
                     }
                     
-                    completionHandler(Result.Success(attractions))
+                    //Set attractions in data service instance
+                    TAAppDataService.sharedInstance.attractions = attractions
                     
+                    completionHandler(Result.Success(attractions))
                     
                 case .Failure(let error):
                     debugPrint(error)

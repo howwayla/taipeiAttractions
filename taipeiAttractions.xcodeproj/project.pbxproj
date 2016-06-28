@@ -18,6 +18,9 @@
 		439A97881D21646F004A4E2C /* TAAttraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97871D21646F004A4E2C /* TAAttraction.swift */; };
 		439A97891D21646F004A4E2C /* TAAttraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97871D21646F004A4E2C /* TAAttraction.swift */; };
 		439A978C1D21997F004A4E2C /* TAAttractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A978B1D21997F004A4E2C /* TAAttractionTests.swift */; };
+		439B2F6F1D21FEA300D064F2 /* TAAppDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B2F6E1D21FEA300D064F2 /* TAAppDataService.swift */; };
+		439B2F701D21FEA300D064F2 /* TAAppDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B2F6E1D21FEA300D064F2 /* TAAppDataService.swift */; };
+		439B2F731D22475A00D064F2 /* TAAppDateServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B2F721D22475A00D064F2 /* TAAppDateServiceTests.swift */; };
 		43CD18B71D214988001F41A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18B61D214988001F41A2 /* AppDelegate.swift */; };
 		43CD18B91D214988001F41A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18B81D214988001F41A2 /* ViewController.swift */; };
 		43CD18BC1D214988001F41A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43CD18BA1D214988001F41A2 /* Main.storyboard */; };
@@ -48,6 +51,8 @@
 		439A97831D216395004A4E2C /* TAAttractionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionService.swift; sourceTree = "<group>"; };
 		439A97871D21646F004A4E2C /* TAAttraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttraction.swift; sourceTree = "<group>"; };
 		439A978B1D21997F004A4E2C /* TAAttractionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionTests.swift; sourceTree = "<group>"; };
+		439B2F6E1D21FEA300D064F2 /* TAAppDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAppDataService.swift; sourceTree = "<group>"; };
+		439B2F721D22475A00D064F2 /* TAAppDateServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAppDateServiceTests.swift; sourceTree = "<group>"; };
 		43CD18B31D214988001F41A2 /* taipeiAttractions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = taipeiAttractions.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43CD18B61D214988001F41A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43CD18B81D214988001F41A2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -137,6 +142,22 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		439B2F6D1D21FE9000D064F2 /* AppDataService */ = {
+			isa = PBXGroup;
+			children = (
+				439B2F6E1D21FEA300D064F2 /* TAAppDataService.swift */,
+			);
+			path = AppDataService;
+			sourceTree = "<group>";
+		};
+		439B2F711D22474200D064F2 /* AppDataService */ = {
+			isa = PBXGroup;
+			children = (
+				439B2F721D22475A00D064F2 /* TAAppDateServiceTests.swift */,
+			);
+			path = AppDataService;
+			sourceTree = "<group>";
+		};
 		43CD18AA1D214988001F41A2 = {
 			isa = PBXGroup;
 			children = (
@@ -160,6 +181,7 @@
 		43CD18B51D214988001F41A2 /* taipeiAttractions */ = {
 			isa = PBXGroup;
 			children = (
+				439B2F6D1D21FE9000D064F2 /* AppDataService */,
 				439567741D215AB300BFF15F /* Networking */,
 				43CD18B61D214988001F41A2 /* AppDelegate.swift */,
 				43CD18B81D214988001F41A2 /* ViewController.swift */,
@@ -174,6 +196,7 @@
 		43CD18CA1D214988001F41A2 /* taipeiAttractionsTests */ = {
 			isa = PBXGroup;
 			children = (
+				439B2F711D22474200D064F2 /* AppDataService */,
 				439A978A1D219964004A4E2C /* Model */,
 				439567711D21592600BFF15F /* Networking */,
 				43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */,
@@ -414,6 +437,7 @@
 				43CD18B91D214988001F41A2 /* ViewController.swift in Sources */,
 				439A97881D21646F004A4E2C /* TAAttraction.swift in Sources */,
 				439A97841D216395004A4E2C /* TAAttractionService.swift in Sources */,
+				439B2F6F1D21FEA300D064F2 /* TAAppDataService.swift in Sources */,
 				439567771D215AF300BFF15F /* TAAttractionRouter.swift in Sources */,
 				43D4D22A1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */,
 				4395677A1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */,
@@ -428,10 +452,12 @@
 				439A978C1D21997F004A4E2C /* TAAttractionTests.swift in Sources */,
 				439567731D215A0900BFF15F /* TAGetAttractionsTests.swift in Sources */,
 				439A97891D21646F004A4E2C /* TAAttraction.swift in Sources */,
+				439B2F701D21FEA300D064F2 /* TAAppDataService.swift in Sources */,
 				43D4D22B1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */,
 				439A97851D216395004A4E2C /* TAAttractionService.swift in Sources */,
 				439567781D215AF300BFF15F /* TAAttractionRouter.swift in Sources */,
 				4395677B1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */,
+				439B2F731D22475A00D064F2 /* TAAppDateServiceTests.swift in Sources */,
 				43CD18CC1D214988001F41A2 /* taipeiAttractionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
