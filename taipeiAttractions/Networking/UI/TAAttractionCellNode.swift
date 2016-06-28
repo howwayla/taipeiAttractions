@@ -52,7 +52,7 @@ class TAAttractionCellNode: ASCellNode {
         var attributes = TextStyle.description
         
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 3.0
+        paragraphStyle.lineSpacing = 5.0
         
         attributes[NSParagraphStyleAttributeName] = paragraphStyle
         descriptionNode.attributedString = NSAttributedString(string: attraction.description!, attributes: attributes)

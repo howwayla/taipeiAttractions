@@ -17,9 +17,13 @@ class TAAppDataService {
     
     var attractions: [TAAttraction] = [] {
         didSet {
-           setupCategories()
+            setupCategories()
+            setupAttractionsByCategory()
         }
     }
+    
+    var attractionsByCategory: [String: [TAAttraction]] = [:]
+    
     
     //MARK:- Setup methods
     /**
@@ -39,5 +43,12 @@ class TAAppDataService {
             }
         }
         self.categories = newCategories
+    }
+    
+    private func setupAttractionsByCategory() {
+        for category in self.categories {
+            let attractions = self.attractions.filter{ $0.category == category }
+            self.attractionsByCategory[category] = attractions
+        }
     }
 }

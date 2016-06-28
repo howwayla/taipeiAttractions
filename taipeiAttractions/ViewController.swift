@@ -13,9 +13,32 @@ import AsyncDisplayKit
 
 class ViewController: UIViewController {
 
-    private var attractions: [String : [TAAttraction]] = [:]
-    
+    @IBOutlet weak var reloadButton: UIButton! {
+        didSet {
+            reloadButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+            reloadButton.layer.borderWidth = 1.0
+            reloadButton.layer.cornerRadius = 5.0
+        }
+    }
     private var tableView: ASTableView!
+    
+    
+    private var attractions: [String : [TAAttraction]] = [:]
+    private var selectedCategory: String? {
+        didSet {
+            attractions.removeAll()
+            if let selectedCategory = selectedCategory {
+                title = selectedCategory
+                attractions[selectedCategory] = TAAppDataService.sharedInstance.attractionsByCategory[selectedCategory]
+                
+            } else {
+                title = "全部"
+                attractions = TAAppDataService.sharedInstance.attractionsByCategory
+            }
+            tableView.reloadData()
+        }
+    }
+    
     
     //MARK:- Life cycle
     override func viewDidLoad() {
@@ -27,6 +50,7 @@ class ViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setTableViewFrame()
+        setupNavigation()
     }
     
     //MArk:- Setup methods
@@ -34,63 +58,127 @@ class ViewController: UIViewController {
         tableView = ASTableView(frame: CGRectZero)
         tableView.asyncDataSource = self
         tableView.separatorStyle = .None
+        tableView.allowsSelection = false
         
-        self.view.addSubview(tableView)
+        view.addSubview(tableView)
     }
     
     private func setTableViewFrame() {
         tableView.frame = CGRectMake(0, 0, view.frame.width, view.frame.height)
     }
     
-    
-    //MARK:- Actions
+    private func setupNavigation() {
+        title = "全部"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter-icon"),
+                                                            style: .Plain,
+                                                            target: self,
+                                                            action: #selector(showFilterActionSheet))
+    }
+}
+
+
+//MARK:- Actions
+extension ViewController {
     private func fetchAttractions() {
+        
+        SVProgressHUD.setDefaultMaskType(.Clear)
         SVProgressHUD.show()
+        
         TAAttractionService.getAttractions(){ result in
             dispatch_async(dispatch_get_main_queue()) {
-                SVProgressHUD.dismiss()
                 switch result {
                 case .Success(_):
                     self.fetchAttractionsDidSuccess()
                 case .Failure(_):
-                    break
+                    self.fetchAttractionsDidFail()
                 }
             }
         }
     }
     
     private func fetchAttractionsDidSuccess() {
+        SVProgressHUD.dismiss()
+        
+        navigationItem.rightBarButtonItem?.enabled = true
+        reloadButton.hidden = true
+        self.tableView.hidden = false
+        
+        //Set data and reload table view
+        attractions = TAAppDataService.sharedInstance.attractionsByCategory
+        tableView.reloadData()
+    }
+    
+    private func fetchAttractionsDidFail() {
+        SVProgressHUD.showErrorWithStatus("載入失敗")
+        SVProgressHUD.dismissWithDelay(0.8)
+        
+        navigationItem.rightBarButtonItem?.enabled = false
+        reloadButton.hidden = false
+        tableView.hidden = true
+    }
+    
+    
+    @objc private func showFilterActionSheet() {
+        let actionSheet = UIAlertController(title: "選擇類別", message: nil, preferredStyle: .ActionSheet)
+        
+        actionSheet.addAction(UIAlertAction(title: "全部", style: .Default) { _ in
+            self.selectedCategory = nil
+        })
         
         for category in TAAppDataService.sharedInstance.categories {
-            let attractions = TAAppDataService.sharedInstance.attractions.filter{ $0.category == category }
-            self.attractions[category] = attractions
+            actionSheet.addAction(UIAlertAction(title: category, style: .Default) { _ in
+                self.selectedCategory = category
+            })
         }
-        
-        self.tableView.reloadData()
+        actionSheet.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+        presentViewController(actionSheet, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func reloadData(sender: UIButton) {
+        fetchAttractions()
     }
 }
 
+
+//MARK:- ASTableViewDataSource
 extension ViewController: ASTableViewDataSource {
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return TAAppDataService.sharedInstance.categories[section]
-    }
-    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return TAAppDataService.sharedInstance.categories.count
+        return attractions.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let category = TAAppDataService.sharedInstance.categories[section]
+        let category = categoryString(section)
         return attractions[category]?.count ?? 0
     }
     
-    func tableView(tableView: ASTableView, nodeForRowAtIndexPath indexPath: NSIndexPath) -> ASCellNode {
-        let category = TAAppDataService.sharedInstance.categories[indexPath.section]
-        let attraction = attractions[category]![indexPath.row]
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        // hide section header if user selected one category
+        if selectedCategory != nil {
+            return nil
+        }
         
+        return TAAppDataService.sharedInstance.categories[section]
+    }
+    
+    func tableView(tableView: ASTableView, nodeForRowAtIndexPath indexPath: NSIndexPath) -> ASCellNode {
+        let category = categoryString(indexPath.section)
+        let attraction = attractions[category]![indexPath.row]
         let cellNdoe = TAAttractionCellNode(attraction: attraction)
         
         return cellNdoe
+    }
+    
+    
+    private func categoryString(section: Int) -> String {
+        var category: String!
+        if selectedCategory != nil {
+            category = selectedCategory
+        } else {
+            category = TAAppDataService.sharedInstance.categories[section]
+        }
+        return category
     }
 }
