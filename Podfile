@@ -8,6 +8,8 @@ inhibit_all_warnings!
 target 'taipeiAttractions' do
   pod 'Alamofire'
   pod 'ObjectMapper'
+  pod 'OHHTTPStubs'
+  pod 'OHHTTPStubs/Swift'
   pod 'Nimble'
 
   target 'taipeiAttractionsTests' do
