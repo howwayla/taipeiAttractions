@@ -29,6 +29,7 @@
 		43CD18CC1D214988001F41A2 /* taipeiAttractionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */; };
 		43D4D22A1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */; };
 		43D4D22B1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */; };
+		43E20EBE1D22C74B005301F5 /* TAAttractionCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */; };
 		A5387CEB1C526E840454C468 /* Pods_taipeiAttractions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = taipeiAttractionsTests.swift; sourceTree = "<group>"; };
 		43CD18CD1D214988001F41A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoURLTransform.swift; sourceTree = "<group>"; };
+		43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionCellNode.swift; sourceTree = "<group>"; };
 		63F6C6C1CEBE25E33B11E2E0 /* Pods-taipeiAttractionsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractionsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_taipeiAttractions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB7A248053ADF503415BC63C /* Pods-taipeiAttractionsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractionsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 			children = (
 				439B2F6D1D21FE9000D064F2 /* AppDataService */,
 				439567741D215AB300BFF15F /* Networking */,
+				43E20EBC1D22C725005301F5 /* UI */,
 				43CD18B61D214988001F41A2 /* AppDelegate.swift */,
 				43CD18B81D214988001F41A2 /* ViewController.swift */,
 				43CD18BA1D214988001F41A2 /* Main.storyboard */,
@@ -211,6 +214,15 @@
 				43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */,
 			);
 			path = TransformType;
+			sourceTree = "<group>";
+		};
+		43E20EBC1D22C725005301F5 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */,
+			);
+			name = UI;
+			path = Networking/UI;
 			sourceTree = "<group>";
 		};
 		A93D22E29702FBE422F82948 /* Pods */ = {
@@ -290,6 +302,7 @@
 				TargetAttributes = {
 					43CD18B21D214988001F41A2 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = B38DH46EPX;
 					};
 					43CD18C61D214988001F41A2 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -439,6 +452,7 @@
 				439A97841D216395004A4E2C /* TAAttractionService.swift in Sources */,
 				439B2F6F1D21FEA300D064F2 /* TAAppDataService.swift in Sources */,
 				439567771D215AF300BFF15F /* TAAttractionRouter.swift in Sources */,
+				43E20EBE1D22C74B005301F5 /* TAAttractionCellNode.swift in Sources */,
 				43D4D22A1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */,
 				4395677A1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */,
 				43CD18B71D214988001F41A2 /* AppDelegate.swift in Sources */,
@@ -582,6 +596,7 @@
 			baseConfigurationReference = D74F175E0A761286A85C8E19 /* Pods-taipeiAttractions.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = taipeiAttractions/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -595,6 +610,7 @@
 			baseConfigurationReference = 02B22FC284CA2BB82DA77FB5 /* Pods-taipeiAttractions.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = taipeiAttractions/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
