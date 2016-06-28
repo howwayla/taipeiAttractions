@@ -8,12 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		4327C44875E3FE57FB2598D7 /* Pods_taipeiAttractionsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE4D024F3C8DCFB31481006 /* Pods_taipeiAttractionsTests.framework */; };
+		439567731D215A0900BFF15F /* TAGetAttractionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567721D215A0900BFF15F /* TAGetAttractionsTests.swift */; };
+		439567771D215AF300BFF15F /* TAAttractionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567761D215AF300BFF15F /* TAAttractionRouter.swift */; };
+		439567781D215AF300BFF15F /* TAAttractionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567761D215AF300BFF15F /* TAAttractionRouter.swift */; };
+		4395677A1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567791D215C6A00BFF15F /* TANetworkingConfig.swift */; };
+		4395677B1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567791D215C6A00BFF15F /* TANetworkingConfig.swift */; };
+		439A97841D216395004A4E2C /* TAAttractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97831D216395004A4E2C /* TAAttractionService.swift */; };
+		439A97851D216395004A4E2C /* TAAttractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97831D216395004A4E2C /* TAAttractionService.swift */; };
+		439A97881D21646F004A4E2C /* TAAttraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97871D21646F004A4E2C /* TAAttraction.swift */; };
+		439A97891D21646F004A4E2C /* TAAttraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97871D21646F004A4E2C /* TAAttraction.swift */; };
+		439A978C1D21997F004A4E2C /* TAAttractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A978B1D21997F004A4E2C /* TAAttractionTests.swift */; };
 		43CD18B71D214988001F41A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18B61D214988001F41A2 /* AppDelegate.swift */; };
 		43CD18B91D214988001F41A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18B81D214988001F41A2 /* ViewController.swift */; };
 		43CD18BC1D214988001F41A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43CD18BA1D214988001F41A2 /* Main.storyboard */; };
 		43CD18BE1D214988001F41A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43CD18BD1D214988001F41A2 /* Assets.xcassets */; };
 		43CD18C11D214988001F41A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43CD18BF1D214988001F41A2 /* LaunchScreen.storyboard */; };
 		43CD18CC1D214988001F41A2 /* taipeiAttractionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */; };
+		43D4D22A1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */; };
+		43D4D22B1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */; };
 		A5387CEB1C526E840454C468 /* Pods_taipeiAttractions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +42,12 @@
 /* Begin PBXFileReference section */
 		02B22FC284CA2BB82DA77FB5 /* Pods-taipeiAttractions.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractions.release.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractions/Pods-taipeiAttractions.release.xcconfig"; sourceTree = "<group>"; };
 		1EE4D024F3C8DCFB31481006 /* Pods_taipeiAttractionsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_taipeiAttractionsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		439567721D215A0900BFF15F /* TAGetAttractionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAGetAttractionsTests.swift; sourceTree = "<group>"; };
+		439567761D215AF300BFF15F /* TAAttractionRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionRouter.swift; sourceTree = "<group>"; };
+		439567791D215C6A00BFF15F /* TANetworkingConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TANetworkingConfig.swift; sourceTree = "<group>"; };
+		439A97831D216395004A4E2C /* TAAttractionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionService.swift; sourceTree = "<group>"; };
+		439A97871D21646F004A4E2C /* TAAttraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttraction.swift; sourceTree = "<group>"; };
+		439A978B1D21997F004A4E2C /* TAAttractionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionTests.swift; sourceTree = "<group>"; };
 		43CD18B31D214988001F41A2 /* taipeiAttractions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = taipeiAttractions.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43CD18B61D214988001F41A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43CD18B81D214988001F41A2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -40,6 +58,7 @@
 		43CD18C71D214988001F41A2 /* taipeiAttractionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = taipeiAttractionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = taipeiAttractionsTests.swift; sourceTree = "<group>"; };
 		43CD18CD1D214988001F41A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoURLTransform.swift; sourceTree = "<group>"; };
 		63F6C6C1CEBE25E33B11E2E0 /* Pods-taipeiAttractionsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractionsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_taipeiAttractions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB7A248053ADF503415BC63C /* Pods-taipeiAttractionsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractionsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -66,6 +85,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		439567711D21592600BFF15F /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				439567721D215A0900BFF15F /* TAGetAttractionsTests.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		439567741D215AB300BFF15F /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				439567791D215C6A00BFF15F /* TANetworkingConfig.swift */,
+				439567751D215ACB00BFF15F /* Router */,
+				439A97821D21637D004A4E2C /* Service */,
+				439A97861D21643D004A4E2C /* Model */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		439567751D215ACB00BFF15F /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				439567761D215AF300BFF15F /* TAAttractionRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		439A97821D21637D004A4E2C /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				439A97831D216395004A4E2C /* TAAttractionService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		439A97861D21643D004A4E2C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				43D4D2281D21F3FA00CAB004 /* TransformType */,
+				439A97871D21646F004A4E2C /* TAAttraction.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		439A978A1D219964004A4E2C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				439A978B1D21997F004A4E2C /* TAAttractionTests.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		43CD18AA1D214988001F41A2 = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +160,7 @@
 		43CD18B51D214988001F41A2 /* taipeiAttractions */ = {
 			isa = PBXGroup;
 			children = (
+				439567741D215AB300BFF15F /* Networking */,
 				43CD18B61D214988001F41A2 /* AppDelegate.swift */,
 				43CD18B81D214988001F41A2 /* ViewController.swift */,
 				43CD18BA1D214988001F41A2 /* Main.storyboard */,
@@ -102,10 +174,20 @@
 		43CD18CA1D214988001F41A2 /* taipeiAttractionsTests */ = {
 			isa = PBXGroup;
 			children = (
+				439A978A1D219964004A4E2C /* Model */,
+				439567711D21592600BFF15F /* Networking */,
 				43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */,
 				43CD18CD1D214988001F41A2 /* Info.plist */,
 			);
 			path = taipeiAttractionsTests;
+			sourceTree = "<group>";
+		};
+		43D4D2281D21F3FA00CAB004 /* TransformType */ = {
+			isa = PBXGroup;
+			children = (
+				43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */,
+			);
+			path = TransformType;
 			sourceTree = "<group>";
 		};
 		A93D22E29702FBE422F82948 /* Pods */ = {
@@ -178,6 +260,7 @@
 		43CD18AB1D214988001F41A2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = TA;
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Hardy;
@@ -329,6 +412,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				43CD18B91D214988001F41A2 /* ViewController.swift in Sources */,
+				439A97881D21646F004A4E2C /* TAAttraction.swift in Sources */,
+				439A97841D216395004A4E2C /* TAAttractionService.swift in Sources */,
+				439567771D215AF300BFF15F /* TAAttractionRouter.swift in Sources */,
+				43D4D22A1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */,
+				4395677A1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */,
 				43CD18B71D214988001F41A2 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -337,6 +425,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				439A978C1D21997F004A4E2C /* TAAttractionTests.swift in Sources */,
+				439567731D215A0900BFF15F /* TAGetAttractionsTests.swift in Sources */,
+				439A97891D21646F004A4E2C /* TAAttraction.swift in Sources */,
+				43D4D22B1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */,
+				439A97851D216395004A4E2C /* TAAttractionService.swift in Sources */,
+				439567781D215AF300BFF15F /* TAAttractionRouter.swift in Sources */,
+				4395677B1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */,
 				43CD18CC1D214988001F41A2 /* taipeiAttractionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
