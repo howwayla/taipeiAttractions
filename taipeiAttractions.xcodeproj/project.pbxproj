@@ -7,12 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4327C44875E3FE57FB2598D7 /* Pods_taipeiAttractionsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE4D024F3C8DCFB31481006 /* Pods_taipeiAttractionsTests.framework */; };
+		439567731D215A0900BFF15F /* TAGetAttractionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567721D215A0900BFF15F /* TAGetAttractionsTests.swift */; };
+		439567771D215AF300BFF15F /* TAAttractionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567761D215AF300BFF15F /* TAAttractionRouter.swift */; };
+		439567781D215AF300BFF15F /* TAAttractionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567761D215AF300BFF15F /* TAAttractionRouter.swift */; };
+		4395677A1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567791D215C6A00BFF15F /* TANetworkingConfig.swift */; };
+		4395677B1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439567791D215C6A00BFF15F /* TANetworkingConfig.swift */; };
+		439A97841D216395004A4E2C /* TAAttractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97831D216395004A4E2C /* TAAttractionService.swift */; };
+		439A97851D216395004A4E2C /* TAAttractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97831D216395004A4E2C /* TAAttractionService.swift */; };
+		439A97881D21646F004A4E2C /* TAAttraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97871D21646F004A4E2C /* TAAttraction.swift */; };
+		439A97891D21646F004A4E2C /* TAAttraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A97871D21646F004A4E2C /* TAAttraction.swift */; };
+		439A978C1D21997F004A4E2C /* TAAttractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439A978B1D21997F004A4E2C /* TAAttractionTests.swift */; };
+		439B2F6F1D21FEA300D064F2 /* TAAppDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B2F6E1D21FEA300D064F2 /* TAAppDataService.swift */; };
+		439B2F701D21FEA300D064F2 /* TAAppDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B2F6E1D21FEA300D064F2 /* TAAppDataService.swift */; };
+		439B2F731D22475A00D064F2 /* TAAppDateServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B2F721D22475A00D064F2 /* TAAppDateServiceTests.swift */; };
 		43CD18B71D214988001F41A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18B61D214988001F41A2 /* AppDelegate.swift */; };
 		43CD18B91D214988001F41A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18B81D214988001F41A2 /* ViewController.swift */; };
 		43CD18BC1D214988001F41A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43CD18BA1D214988001F41A2 /* Main.storyboard */; };
 		43CD18BE1D214988001F41A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43CD18BD1D214988001F41A2 /* Assets.xcassets */; };
 		43CD18C11D214988001F41A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43CD18BF1D214988001F41A2 /* LaunchScreen.storyboard */; };
 		43CD18CC1D214988001F41A2 /* taipeiAttractionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */; };
+		43D4D22A1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */; };
+		43D4D22B1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */; };
+		43E20EBE1D22C74B005301F5 /* TAAttractionCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */; };
+		A5387CEB1C526E840454C468 /* Pods_taipeiAttractions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,6 +44,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		02B22FC284CA2BB82DA77FB5 /* Pods-taipeiAttractions.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractions.release.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractions/Pods-taipeiAttractions.release.xcconfig"; sourceTree = "<group>"; };
+		1EE4D024F3C8DCFB31481006 /* Pods_taipeiAttractionsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_taipeiAttractionsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		439567721D215A0900BFF15F /* TAGetAttractionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAGetAttractionsTests.swift; sourceTree = "<group>"; };
+		439567761D215AF300BFF15F /* TAAttractionRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionRouter.swift; sourceTree = "<group>"; };
+		439567791D215C6A00BFF15F /* TANetworkingConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TANetworkingConfig.swift; sourceTree = "<group>"; };
+		439A97831D216395004A4E2C /* TAAttractionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionService.swift; sourceTree = "<group>"; };
+		439A97871D21646F004A4E2C /* TAAttraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttraction.swift; sourceTree = "<group>"; };
+		439A978B1D21997F004A4E2C /* TAAttractionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionTests.swift; sourceTree = "<group>"; };
+		439B2F6E1D21FEA300D064F2 /* TAAppDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAppDataService.swift; sourceTree = "<group>"; };
+		439B2F721D22475A00D064F2 /* TAAppDateServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAppDateServiceTests.swift; sourceTree = "<group>"; };
 		43CD18B31D214988001F41A2 /* taipeiAttractions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = taipeiAttractions.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43CD18B61D214988001F41A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43CD18B81D214988001F41A2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -36,6 +64,12 @@
 		43CD18C71D214988001F41A2 /* taipeiAttractionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = taipeiAttractionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = taipeiAttractionsTests.swift; sourceTree = "<group>"; };
 		43CD18CD1D214988001F41A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoURLTransform.swift; sourceTree = "<group>"; };
+		43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionCellNode.swift; sourceTree = "<group>"; };
+		63F6C6C1CEBE25E33B11E2E0 /* Pods-taipeiAttractionsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractionsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_taipeiAttractions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB7A248053ADF503415BC63C /* Pods-taipeiAttractionsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractionsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests.release.xcconfig"; sourceTree = "<group>"; };
+		D74F175E0A761286A85C8E19 /* Pods-taipeiAttractions.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractions.debug.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractions/Pods-taipeiAttractions.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5387CEB1C526E840454C468 /* Pods_taipeiAttractions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,18 +85,89 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4327C44875E3FE57FB2598D7 /* Pods_taipeiAttractionsTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		439567711D21592600BFF15F /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				439567721D215A0900BFF15F /* TAGetAttractionsTests.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		439567741D215AB300BFF15F /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				439567791D215C6A00BFF15F /* TANetworkingConfig.swift */,
+				439567751D215ACB00BFF15F /* Router */,
+				439A97821D21637D004A4E2C /* Service */,
+				439A97861D21643D004A4E2C /* Model */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		439567751D215ACB00BFF15F /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				439567761D215AF300BFF15F /* TAAttractionRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		439A97821D21637D004A4E2C /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				439A97831D216395004A4E2C /* TAAttractionService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		439A97861D21643D004A4E2C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				43D4D2281D21F3FA00CAB004 /* TransformType */,
+				439A97871D21646F004A4E2C /* TAAttraction.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		439A978A1D219964004A4E2C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				439A978B1D21997F004A4E2C /* TAAttractionTests.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		439B2F6D1D21FE9000D064F2 /* AppDataService */ = {
+			isa = PBXGroup;
+			children = (
+				439B2F6E1D21FEA300D064F2 /* TAAppDataService.swift */,
+			);
+			path = AppDataService;
+			sourceTree = "<group>";
+		};
+		439B2F711D22474200D064F2 /* AppDataService */ = {
+			isa = PBXGroup;
+			children = (
+				439B2F721D22475A00D064F2 /* TAAppDateServiceTests.swift */,
+			);
+			path = AppDataService;
+			sourceTree = "<group>";
+		};
 		43CD18AA1D214988001F41A2 = {
 			isa = PBXGroup;
 			children = (
 				43CD18B51D214988001F41A2 /* taipeiAttractions */,
 				43CD18CA1D214988001F41A2 /* taipeiAttractionsTests */,
 				43CD18B41D214988001F41A2 /* Products */,
+				A93D22E29702FBE422F82948 /* Pods */,
+				AF8961C96809CE8137381B67 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +183,9 @@
 		43CD18B51D214988001F41A2 /* taipeiAttractions */ = {
 			isa = PBXGroup;
 			children = (
+				439B2F6D1D21FE9000D064F2 /* AppDataService */,
+				439567741D215AB300BFF15F /* Networking */,
+				43E20EBC1D22C725005301F5 /* UI */,
 				43CD18B61D214988001F41A2 /* AppDelegate.swift */,
 				43CD18B81D214988001F41A2 /* ViewController.swift */,
 				43CD18BA1D214988001F41A2 /* Main.storyboard */,
@@ -90,10 +199,50 @@
 		43CD18CA1D214988001F41A2 /* taipeiAttractionsTests */ = {
 			isa = PBXGroup;
 			children = (
+				439B2F711D22474200D064F2 /* AppDataService */,
+				439A978A1D219964004A4E2C /* Model */,
+				439567711D21592600BFF15F /* Networking */,
 				43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */,
 				43CD18CD1D214988001F41A2 /* Info.plist */,
 			);
 			path = taipeiAttractionsTests;
+			sourceTree = "<group>";
+		};
+		43D4D2281D21F3FA00CAB004 /* TransformType */ = {
+			isa = PBXGroup;
+			children = (
+				43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */,
+			);
+			path = TransformType;
+			sourceTree = "<group>";
+		};
+		43E20EBC1D22C725005301F5 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */,
+			);
+			name = UI;
+			path = Networking/UI;
+			sourceTree = "<group>";
+		};
+		A93D22E29702FBE422F82948 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D74F175E0A761286A85C8E19 /* Pods-taipeiAttractions.debug.xcconfig */,
+				02B22FC284CA2BB82DA77FB5 /* Pods-taipeiAttractions.release.xcconfig */,
+				63F6C6C1CEBE25E33B11E2E0 /* Pods-taipeiAttractionsTests.debug.xcconfig */,
+				BB7A248053ADF503415BC63C /* Pods-taipeiAttractionsTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		AF8961C96809CE8137381B67 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */,
+				1EE4D024F3C8DCFB31481006 /* Pods_taipeiAttractionsTests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -103,9 +252,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43CD18D01D214988001F41A2 /* Build configuration list for PBXNativeTarget "taipeiAttractions" */;
 			buildPhases = (
+				AFD8BBDBD60425BC1A85CF66 /* [CP] Check Pods Manifest.lock */,
 				43CD18AF1D214988001F41A2 /* Sources */,
 				43CD18B01D214988001F41A2 /* Frameworks */,
 				43CD18B11D214988001F41A2 /* Resources */,
+				8AD108DFCDAC38BA48300D06 /* [CP] Embed Pods Frameworks */,
+				1F8B550D54963BF3CE1D50DE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -120,9 +272,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43CD18D31D214988001F41A2 /* Build configuration list for PBXNativeTarget "taipeiAttractionsTests" */;
 			buildPhases = (
+				00522F2AE4D10F9C9E5E5D1B /* [CP] Check Pods Manifest.lock */,
 				43CD18C31D214988001F41A2 /* Sources */,
 				43CD18C41D214988001F41A2 /* Frameworks */,
 				43CD18C51D214988001F41A2 /* Resources */,
+				15C48F5169775BC74AD27F35 /* [CP] Embed Pods Frameworks */,
+				4FD36B20F3DF544D8A4B6369 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -140,12 +295,14 @@
 		43CD18AB1D214988001F41A2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = TA;
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Hardy;
 				TargetAttributes = {
 					43CD18B21D214988001F41A2 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = B38DH46EPX;
 					};
 					43CD18C61D214988001F41A2 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -192,12 +349,112 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		00522F2AE4D10F9C9E5E5D1B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		15C48F5169775BC74AD27F35 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1F8B550D54963BF3CE1D50DE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-taipeiAttractions/Pods-taipeiAttractions-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4FD36B20F3DF544D8A4B6369 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8AD108DFCDAC38BA48300D06 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-taipeiAttractions/Pods-taipeiAttractions-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AFD8BBDBD60425BC1A85CF66 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		43CD18AF1D214988001F41A2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				43CD18B91D214988001F41A2 /* ViewController.swift in Sources */,
+				439A97881D21646F004A4E2C /* TAAttraction.swift in Sources */,
+				439A97841D216395004A4E2C /* TAAttractionService.swift in Sources */,
+				439B2F6F1D21FEA300D064F2 /* TAAppDataService.swift in Sources */,
+				439567771D215AF300BFF15F /* TAAttractionRouter.swift in Sources */,
+				43E20EBE1D22C74B005301F5 /* TAAttractionCellNode.swift in Sources */,
+				43D4D22A1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */,
+				4395677A1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */,
 				43CD18B71D214988001F41A2 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -206,6 +463,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				439A978C1D21997F004A4E2C /* TAAttractionTests.swift in Sources */,
+				439567731D215A0900BFF15F /* TAGetAttractionsTests.swift in Sources */,
+				439A97891D21646F004A4E2C /* TAAttraction.swift in Sources */,
+				439B2F701D21FEA300D064F2 /* TAAppDataService.swift in Sources */,
+				43D4D22B1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */,
+				439A97851D216395004A4E2C /* TAAttractionService.swift in Sources */,
+				439567781D215AF300BFF15F /* TAAttractionRouter.swift in Sources */,
+				4395677B1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */,
+				439B2F731D22475A00D064F2 /* TAAppDateServiceTests.swift in Sources */,
 				43CD18CC1D214988001F41A2 /* taipeiAttractionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -327,9 +593,12 @@
 		};
 		43CD18D11D214988001F41A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D74F175E0A761286A85C8E19 /* Pods-taipeiAttractions.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = taipeiAttractions/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardy.taipeiAttractions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -338,9 +607,12 @@
 		};
 		43CD18D21D214988001F41A2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 02B22FC284CA2BB82DA77FB5 /* Pods-taipeiAttractions.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = taipeiAttractions/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardy.taipeiAttractions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -349,6 +621,7 @@
 		};
 		43CD18D41D214988001F41A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63F6C6C1CEBE25E33B11E2E0 /* Pods-taipeiAttractionsTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = taipeiAttractionsTests/Info.plist;
@@ -361,6 +634,7 @@
 		};
 		43CD18D51D214988001F41A2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BB7A248053ADF503415BC63C /* Pods-taipeiAttractionsTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = taipeiAttractionsTests/Info.plist;
@@ -390,6 +664,7 @@
 				43CD18D21D214988001F41A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		43CD18D31D214988001F41A2 /* Build configuration list for PBXNativeTarget "taipeiAttractionsTests" */ = {
 			isa = XCConfigurationList;
@@ -398,6 +673,7 @@
 				43CD18D51D214988001F41A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
