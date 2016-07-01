@@ -13,9 +13,10 @@ target 'taipeiAttractions' do
 
   target 'taipeiAttractionsTests' do
     inherit! :search_paths
+    pod 'Nimble'
     pod 'OHHTTPStubs'
     pod 'OHHTTPStubs/Swift'
-    pod 'Nimble'
+
   end
 end
 
