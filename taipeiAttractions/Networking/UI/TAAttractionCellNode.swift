@@ -16,11 +16,11 @@ extension UIColor {
     }
 }
 
+extension TAAttractionCellNode: CellConfigurable{}
 
 class TAAttractionCellNode: ASCellNode {
     
-    var attraction: TAAttraction!
-    
+    var cellController: TAAttractionCellController!
     private let titleNode = ASTextNode()
     private let descriptionNode = ASTextNode()
     private var photoNode: ASNetworkImageNode?
@@ -33,10 +33,10 @@ class TAAttractionCellNode: ASCellNode {
                                   NSForegroundColorAttributeName: UIColor.darkGrayColor()]
     }
     
-    init(attraction: TAAttraction) {
+    init(cellController: TAAttractionCellController) {
         super.init()
         
-        self.attraction = attraction
+        self.cellController = cellController
 
         setupTitleNode()
         setupDescriptionNode()
@@ -44,7 +44,7 @@ class TAAttractionCellNode: ASCellNode {
     }
     
     private func setupTitleNode() {
-        titleNode.attributedString = NSAttributedString(string: attraction.title!, attributes: TextStyle.title)
+        titleNode.attributedString = NSAttributedString(string: cellController.title, attributes: TextStyle.title)
         addSubnode(titleNode)
     }
     
@@ -55,13 +55,13 @@ class TAAttractionCellNode: ASCellNode {
         paragraphStyle.lineSpacing = 5.0
         
         attributes[NSParagraphStyleAttributeName] = paragraphStyle
-        descriptionNode.attributedString = NSAttributedString(string: attraction.description!, attributes: attributes)
+        descriptionNode.attributedString = NSAttributedString(string: cellController.description, attributes: attributes)
         addSubnode(descriptionNode)
     }
     
     private func setupPhotoNodeIfNeeded() {
         
-        if let photoURL = attraction.photoURL?.first {
+        if let photoURL = cellController.photoURL {
             photoNode = ASNetworkImageNode()
             photoNode?.URL = photoURL
             photoNode?.shouldCacheImage = true

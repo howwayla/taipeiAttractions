@@ -23,17 +23,18 @@ class ViewController: UIViewController {
     private var tableView: ASTableView!
     
     
-    private var attractions: [String : [TAAttraction]] = [:]
+    private var attractions: [String : [TAAttractionCellController]] = [:]
     private var selectedCategory: String? {
         didSet {
             attractions.removeAll()
             if let selectedCategory = selectedCategory {
                 title = selectedCategory
-                attractions[selectedCategory] = TAAppDataService.sharedInstance.attractionsByCategory[selectedCategory]
+                
+                attractions[selectedCategory] = TAAppDataService.sharedInstance.attractionsByCategory[selectedCategory]!.map(TAAttractionCellController.init)
                 
             } else {
                 title = "全部"
-                attractions = TAAppDataService.sharedInstance.attractionsByCategory
+                self.transformToAttractionCellControllers()
             }
             tableView.reloadData()
         }
@@ -104,8 +105,17 @@ extension ViewController {
         self.tableView.hidden = false
         
         //Set data and reload table view
-        attractions = TAAppDataService.sharedInstance.attractionsByCategory
+        self.transformToAttractionCellControllers()
         tableView.reloadData()
+    }
+    
+    private func transformToAttractionCellControllers() {
+        for  key in TAAppDataService.sharedInstance.attractionsByCategory.keys {
+            guard let attractions = TAAppDataService.sharedInstance.attractionsByCategory[key] else {
+                continue
+            }
+            self.attractions[key] = attractions.map(TAAttractionCellController.init)
+        }
     }
     
     private func fetchAttractionsDidFail() {
@@ -166,7 +176,7 @@ extension ViewController: ASTableViewDataSource {
     func tableView(tableView: ASTableView, nodeForRowAtIndexPath indexPath: NSIndexPath) -> ASCellNode {
         let category = categoryString(indexPath.section)
         let attraction = attractions[category]![indexPath.row]
-        let cellNdoe = TAAttractionCellNode(attraction: attraction)
+        let cellNdoe = TAAttractionCellNode(cellController: attraction)
         
         return cellNdoe
     }
