@@ -33,6 +33,9 @@
 		43D851671D2ABFAB008293DD /* CellConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851651D2ABFAB008293DD /* CellConfigurable.swift */; };
 		43D851691D2AC399008293DD /* TAAttractionCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851681D2AC399008293DD /* TAAttractionCellController.swift */; };
 		43D8516A1D2AC399008293DD /* TAAttractionCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851681D2AC399008293DD /* TAAttractionCellController.swift */; };
+		43D851601D258DB7008293DD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8515F1D258DB7008293DD /* CoreLocation.framework */; };
+		43D851621D26C023008293DD /* LocationTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851611D26C023008293DD /* LocationTransform.swift */; };
+		43D851631D26C023008293DD /* LocationTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851611D26C023008293DD /* LocationTransform.swift */; };
 		43E20EBE1D22C74B005301F5 /* TAAttractionCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */; };
 		A5387CEB1C526E840454C468 /* Pods_taipeiAttractions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */; };
 /* End PBXBuildFile section */
@@ -71,6 +74,8 @@
 		43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoURLTransform.swift; sourceTree = "<group>"; };
 		43D851651D2ABFAB008293DD /* CellConfigurable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellConfigurable.swift; sourceTree = "<group>"; };
 		43D851681D2AC399008293DD /* TAAttractionCellController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionCellController.swift; sourceTree = "<group>"; };
+		43D8515F1D258DB7008293DD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		43D851611D26C023008293DD /* LocationTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationTransform.swift; sourceTree = "<group>"; };
 		43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionCellNode.swift; sourceTree = "<group>"; };
 		63F6C6C1CEBE25E33B11E2E0 /* Pods-taipeiAttractionsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractionsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_taipeiAttractions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D851601D258DB7008293DD /* CoreLocation.framework in Frameworks */,
 				A5387CEB1C526E840454C468 /* Pods_taipeiAttractions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */,
+				43D851611D26C023008293DD /* LocationTransform.swift */,
 			);
 			path = TransformType;
 			sourceTree = "<group>";
@@ -255,6 +262,7 @@
 		AF8961C96809CE8137381B67 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43D8515F1D258DB7008293DD /* CoreLocation.framework */,
 				B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */,
 				1EE4D024F3C8DCFB31481006 /* Pods_taipeiAttractionsTests.framework */,
 			);
@@ -470,6 +478,7 @@
 				439A97841D216395004A4E2C /* TAAttractionService.swift in Sources */,
 				439B2F6F1D21FEA300D064F2 /* TAAppDataService.swift in Sources */,
 				439567771D215AF300BFF15F /* TAAttractionRouter.swift in Sources */,
+				43D851621D26C023008293DD /* LocationTransform.swift in Sources */,
 				43E20EBE1D22C74B005301F5 /* TAAttractionCellNode.swift in Sources */,
 				43D4D22A1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */,
 				4395677A1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */,
@@ -490,6 +499,7 @@
 				439A97851D216395004A4E2C /* TAAttractionService.swift in Sources */,
 				439567781D215AF300BFF15F /* TAAttractionRouter.swift in Sources */,
 				4395677B1D215C6A00BFF15F /* TANetworkingConfig.swift in Sources */,
+				43D851631D26C023008293DD /* LocationTransform.swift in Sources */,
 				439B2F731D22475A00D064F2 /* TAAppDateServiceTests.swift in Sources */,
 				43D8516A1D2AC399008293DD /* TAAttractionCellController.swift in Sources */,
 				43CD18CC1D214988001F41A2 /* taipeiAttractionsTests.swift in Sources */,
