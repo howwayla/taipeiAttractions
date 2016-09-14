@@ -29,13 +29,13 @@
 		43CD18CC1D214988001F41A2 /* taipeiAttractionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */; };
 		43D4D22A1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */; };
 		43D4D22B1D21F40D00CAB004 /* PhotoURLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */; };
+		43D851601D258DB7008293DD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8515F1D258DB7008293DD /* CoreLocation.framework */; };
+		43D851621D26C023008293DD /* LocationTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851611D26C023008293DD /* LocationTransform.swift */; };
+		43D851631D26C023008293DD /* LocationTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851611D26C023008293DD /* LocationTransform.swift */; };
 		43D851661D2ABFAB008293DD /* CellConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851651D2ABFAB008293DD /* CellConfigurable.swift */; };
 		43D851671D2ABFAB008293DD /* CellConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851651D2ABFAB008293DD /* CellConfigurable.swift */; };
 		43D851691D2AC399008293DD /* TAAttractionCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851681D2AC399008293DD /* TAAttractionCellController.swift */; };
 		43D8516A1D2AC399008293DD /* TAAttractionCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851681D2AC399008293DD /* TAAttractionCellController.swift */; };
-		43D851601D258DB7008293DD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8515F1D258DB7008293DD /* CoreLocation.framework */; };
-		43D851621D26C023008293DD /* LocationTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851611D26C023008293DD /* LocationTransform.swift */; };
-		43D851631D26C023008293DD /* LocationTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D851611D26C023008293DD /* LocationTransform.swift */; };
 		43E20EBE1D22C74B005301F5 /* TAAttractionCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */; };
 		A5387CEB1C526E840454C468 /* Pods_taipeiAttractions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */; };
 /* End PBXBuildFile section */
@@ -72,10 +72,10 @@
 		43CD18CB1D214988001F41A2 /* taipeiAttractionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = taipeiAttractionsTests.swift; sourceTree = "<group>"; };
 		43CD18CD1D214988001F41A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		43D4D2291D21F40D00CAB004 /* PhotoURLTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoURLTransform.swift; sourceTree = "<group>"; };
-		43D851651D2ABFAB008293DD /* CellConfigurable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellConfigurable.swift; sourceTree = "<group>"; };
-		43D851681D2AC399008293DD /* TAAttractionCellController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionCellController.swift; sourceTree = "<group>"; };
 		43D8515F1D258DB7008293DD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		43D851611D26C023008293DD /* LocationTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationTransform.swift; sourceTree = "<group>"; };
+		43D851651D2ABFAB008293DD /* CellConfigurable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellConfigurable.swift; sourceTree = "<group>"; };
+		43D851681D2AC399008293DD /* TAAttractionCellController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionCellController.swift; sourceTree = "<group>"; };
 		43E20EBD1D22C74B005301F5 /* TAAttractionCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TAAttractionCellNode.swift; sourceTree = "<group>"; };
 		63F6C6C1CEBE25E33B11E2E0 /* Pods-taipeiAttractionsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taipeiAttractionsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-taipeiAttractionsTests/Pods-taipeiAttractionsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B71DE4269885E3649F4971E3 /* Pods_taipeiAttractions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_taipeiAttractions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -321,15 +321,17 @@
 			attributes = {
 				CLASSPREFIX = TA;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Hardy;
 				TargetAttributes = {
 					43CD18B21D214988001F41A2 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = B38DH46EPX;
+						LastSwiftMigration = 0800;
 					};
 					43CD18C61D214988001F41A2 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 43CD18B21D214988001F41A2;
 					};
 				};
@@ -550,8 +552,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -596,8 +600,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -616,6 +622,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -625,6 +632,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D74F175E0A761286A85C8E19 /* Pods-taipeiAttractions.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = taipeiAttractions/Info.plist;
@@ -632,6 +640,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardy.taipeiAttractions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -639,6 +648,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 02B22FC284CA2BB82DA77FB5 /* Pods-taipeiAttractions.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = taipeiAttractions/Info.plist;
@@ -646,6 +656,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardy.taipeiAttractions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -653,11 +664,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 63F6C6C1CEBE25E33B11E2E0 /* Pods-taipeiAttractionsTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = taipeiAttractionsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardy.taipeiAttractionsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/taipeiAttractions.app/taipeiAttractions";
 			};
 			name = Debug;
@@ -666,11 +679,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BB7A248053ADF503415BC63C /* Pods-taipeiAttractionsTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = taipeiAttractionsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardy.taipeiAttractionsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/taipeiAttractions.app/taipeiAttractions";
 			};
 			name = Release;

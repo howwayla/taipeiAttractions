@@ -42,7 +42,7 @@ class TAAttractionTests: XCTestCase {
     }
 
     func testAttractionModel() {
-        let attraction = TAAttraction(JSON: JSON)
+        let attraction = TAAttraction(JSON: JSON as JSONDictionary)
         
         expect(attraction.ID).to(equal("1"))
         expect(attraction.category).to(equal("養生溫泉"))

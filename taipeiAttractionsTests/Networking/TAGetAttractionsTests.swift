@@ -12,7 +12,7 @@ import OHHTTPStubs
 
 class TAGetAttractionsTests: XCTestCase {
     
-    let router = TAAttractionRouter.Attractions
+    let router = TAAttractionRouter.attractions
     
     override func setUp() {
         super.setUp()
@@ -38,7 +38,7 @@ class TAGetAttractionsTests: XCTestCase {
     
     //MARK:- Test Service
     func testGetAttractionsSuccess() {
-        let expectation = expectationWithDescription("test get attractions success")
+        let expectation = self.expectation(description: "test get attractions success")
         
         TAAttractionService.getAttractions() { result in
             expect(result.isSuccess).to(beTrue())
@@ -68,7 +68,7 @@ class TAGetAttractionsTests: XCTestCase {
             return OHHTTPStubsResponse(JSONObject: JSON, statusCode: 200, headers: nil)
         }
         
-        let expectation = expectationWithDescription("test get attractions success")
+        let expectation = self.expectation(description: "test get attractions success")
         
         TAAttractionService.getAttractions() { result in
             expect(result.isSuccess).to(beTrue())
@@ -88,14 +88,14 @@ class TAGetAttractionsTests: XCTestCase {
      */
     func testGetAttractionsFail() {
         let notConnectedError = NSError(domain:NSURLErrorDomain,
-                                        code:Int(CFNetworkErrors.CFURLErrorNotConnectedToInternet.rawValue),
+                                        code:Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue),
                                         userInfo:nil)
         stub(isHost("data.taipei")) { _ in
             return OHHTTPStubsResponse(error:notConnectedError)
         }
 
         
-        let expectation = expectationWithDescription("test get attractions fail")
+        let expectation = self.expectation(description: "test get attractions fail")
         
         TAAttractionService.getAttractions() { result in
             expect(result.isFailure).to(beTrue())

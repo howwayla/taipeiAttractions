@@ -15,18 +15,19 @@ class TAAttractionService {
 
      - parameter completionHandler: A block to execute after complete fetch attractions
      */
-    class func getAttractions(completionHandler: (Result<[TAAttraction], NSError>) -> Void) {
+    class func getAttractions(_ completionHandler: @escaping (Result<[TAAttraction]>) -> Void) {
         
-        let URLRequest = TAAttractionRouter.Attractions
+        let URLRequest = TAAttractionRouter.attractions
         
         Alamofire.request(URLRequest)
             .validate()
             .responseJSON() { response in
                 
                 switch response.result {
-                case .Success(let JSON):
+                case .success(let JSON):
                     var attractions: [TAAttraction] = []
                     
+                    let JSON = JSON as! JSONDictionary
                     let result = JSON["result"] as! JSONDictionary
                     let attractionJSON = result["results"] as? [JSONDictionary] ?? []
                     for item in attractionJSON {
@@ -36,11 +37,11 @@ class TAAttractionService {
                     //Set attractions in data service instance
                     TAAppDataService.sharedInstance.attractions = attractions
                     
-                    completionHandler(Result.Success(attractions))
+                    completionHandler(Result.success(attractions))
                     
-                case .Failure(let error):
+                case .failure(let error):
                     debugPrint(error)
-                    completionHandler(Result.Failure(error))
+                    completionHandler(Result.failure(error))
                 }
         }
     }

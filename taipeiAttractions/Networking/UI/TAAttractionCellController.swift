@@ -12,18 +12,18 @@ protocol TAAttractionCellRepresentable {
     
     var title: String { get }
     var description: String { get }
-    var photoURL: NSURL? { get }
+    var photoURL: URL? { get }
 }
 
 class TAAttractionCellController: TAAttractionCellRepresentable {
     
     let title: String
     let description: String
-    let photoURL: NSURL?
+    let photoURL: URL?
     
     init(attraction: TAAttraction) {
         title = attraction.title ?? ""
         description = attraction.description ?? ""
-        photoURL = attraction.photoURL?.first
+        photoURL = attraction.photoURL?.first as URL?
     }
 }

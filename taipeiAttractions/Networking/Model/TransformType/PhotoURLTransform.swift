@@ -12,11 +12,11 @@ import ObjectMapper
 /// Transform TAAttraction JSON file column from string to image URL array
 class PhotoURLTransform: TransformType {
     
-    typealias Object = [NSURL]
+    typealias Object = [URL]
     typealias JSON = String?
     
     
-    func transformFromJSON(value: AnyObject?) -> PhotoURLTransform.Object? {
+    public func transformFromJSON(_ value: Any?) -> PhotoURLTransform.Object? {
         if let value = value as? String {
             let imageURLs = parseImageURLWithDataString(value)
             return imageURLs
@@ -25,9 +25,9 @@ class PhotoURLTransform: TransformType {
         return nil
     }
     
-    func transformToJSON(value: PhotoURLTransform.Object?) -> PhotoURLTransform.JSON? {
+    func transformToJSON(_ value: PhotoURLTransform.Object?) -> PhotoURLTransform.JSON? {
         if let imageURLs = value {
-            return imageURLs.map{ $0.absoluteString }.joinWithSeparator("")
+            return imageURLs.map{ $0.absoluteString }.joined(separator: "")
         }
         return nil
     }
@@ -36,34 +36,34 @@ class PhotoURLTransform: TransformType {
 //MARK:- Paring methods
 extension PhotoURLTransform {
 
-    private func parseImageURLWithDataString(date: String) -> [NSURL] {
+    fileprivate func parseImageURLWithDataString(_ date: String) -> [URL] {
         var dateString = date
-        var imageURL: [NSURL] = []
+        var imageURL: [URL] = []
         
-        while let range = dateString.rangeOfString("http", options: [.CaseInsensitiveSearch], range: dateString.startIndex.advancedBy(1) ..< dateString.endIndex, locale: nil) {
+        while let range = dateString.range(of: "http", options: [.caseInsensitive], range: dateString.characters.index(dateString.startIndex, offsetBy: 1) ..< dateString.endIndex, locale: nil) {
             
-            let subString = dateString.substringWithRange(dateString.startIndex ..< range.startIndex)
+            let subString = dateString.substring(with: dateString.startIndex ..< range.lowerBound)
             if isImageURLString(subString) {
-                imageURL.append(NSURL(string: subString)!)
+                imageURL.append(URL(string: subString)!)
             }
             
-            dateString.removeRange(date.startIndex ..< subString.endIndex)
+            dateString.removeSubrange(date.startIndex ..< subString.endIndex)
         }
         
-        if dateString.containsString("http") && isImageURLString(dateString) {
-            imageURL.append(NSURL(string: dateString)!)
+        if dateString.contains("http") && isImageURLString(dateString) {
+            imageURL.append(URL(string: dateString)!)
         }
         
         return imageURL
     }
     
     
-    private func isImageURLString(imageURLString: String) -> Bool {
-        if imageURLString.rangeOfString(".jpg", options: [.CaseInsensitiveSearch], range: nil, locale: nil) != nil {
+    fileprivate func isImageURLString(_ imageURLString: String) -> Bool {
+        if imageURLString.range(of: ".jpg", options: [.caseInsensitive], range: nil, locale: nil) != nil {
             return true
         }
         
-        if imageURLString.rangeOfString(".png", options: [.CaseInsensitiveSearch], range: nil, locale: nil) != nil {
+        if imageURLString.range(of: ".png", options: [.caseInsensitive], range: nil, locale: nil) != nil {
             return true
         }
         

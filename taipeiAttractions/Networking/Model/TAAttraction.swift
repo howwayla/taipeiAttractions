@@ -17,26 +17,26 @@ struct TAAttraction: Mappable {
     var title: String?
     var location: CLLocation?
     var description: String?
-    var photoURL: [NSURL]?
+    var photoURL: [URL]?
     
     
     init(JSON: JSONDictionary) {
         
         let restructJSON = restructLocation(JSON: JSON)
 
-        if let object = Mapper<TAAttraction>().map(restructJSON) {
+        if let object = Mapper<TAAttraction>().map(JSON: restructJSON) {
             self = object
         }
     }
     
-    private func restructLocation(JSON JSON: JSONDictionary) -> JSONDictionary {
+    fileprivate func restructLocation(JSON: JSONDictionary) -> JSONDictionary {
         var restructJSON = JSON
         guard restructJSON["location"] == nil else {
             return JSON
         }
         
         guard let longitude = JSON["longitude"] as? String,
-              let latitude = JSON["latitude"]  as? String else {
+              let latitude  = JSON["latitude"]  as? String else {
             return JSON
         }
         
@@ -47,7 +47,7 @@ struct TAAttraction: Mappable {
     
     
     //MARK:- Mappable
-    init?(_ map: Map) {
+    init?(map: Map) {
         
     }
     

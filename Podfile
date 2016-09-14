@@ -7,12 +7,12 @@ inhibit_all_warnings!
 
 target 'taipeiAttractions' do
   pod 'Alamofire'
-  pod 'ObjectMapper'
+  pod 'ObjectMapper', :git => 'https://github.com/Hearst-DD/ObjectMapper.git', :branch => 'swift-3'
   pod 'AsyncDisplayKit'
   pod 'SVProgressHUD'
-
+  
   target 'taipeiAttractionsTests' do
-    inherit! :search_paths
+    inherit! :search_paths  
     pod 'Nimble'
     pod 'OHHTTPStubs'
     pod 'OHHTTPStubs/Swift'
@@ -20,8 +20,10 @@ target 'taipeiAttractions' do
   end
 end
 
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    puts target.name
-  end
-end
+ post_install do |installer|
+ 	installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['SWIFT_VERSION'] = '3.0'
+        end
+    end
+ end
