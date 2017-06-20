@@ -1,66 +1,65 @@
 PODS:
-  - Alamofire (4.0.0)
-  - AsyncDisplayKit (1.9.90):
-    - AsyncDisplayKit/PINRemoteImage (= 1.9.90)
-  - AsyncDisplayKit/ASDealloc2MainObject (1.9.90)
-  - AsyncDisplayKit/Core (1.9.90):
-    - AsyncDisplayKit/ASDealloc2MainObject
-  - AsyncDisplayKit/PINRemoteImage (1.9.90):
+  - Alamofire (4.5.0)
+  - AsyncDisplayKit (2.2.1):
+    - AsyncDisplayKit/PINRemoteImage (= 2.2.1)
+  - AsyncDisplayKit/Core (2.2.1)
+  - AsyncDisplayKit/PINRemoteImage (2.2.1):
     - AsyncDisplayKit/Core
-    - PINRemoteImage/iOS (>= 3.0.0-beta.3)
-  - Nimble (4.1.0)
-  - ObjectMapper (1.4.0)
-  - OHHTTPStubs (5.2.1):
-    - OHHTTPStubs/Default (= 5.2.1)
-  - OHHTTPStubs/Core (5.2.1)
-  - OHHTTPStubs/Default (5.2.1):
+    - PINRemoteImage/iOS (= 3.0.0-beta.8)
+    - PINRemoteImage/PINCache
+  - Nimble (7.0.1)
+  - ObjectMapper (2.2.7)
+  - OHHTTPStubs (6.0.0):
+    - OHHTTPStubs/Default (= 6.0.0)
+  - OHHTTPStubs/Core (6.0.0)
+  - OHHTTPStubs/Default (6.0.0):
     - OHHTTPStubs/Core
     - OHHTTPStubs/JSON
     - OHHTTPStubs/NSURLSession
     - OHHTTPStubs/OHPathHelpers
-  - OHHTTPStubs/JSON (5.2.1):
+  - OHHTTPStubs/JSON (6.0.0):
     - OHHTTPStubs/Core
-  - OHHTTPStubs/NSURLSession (5.2.1):
+  - OHHTTPStubs/NSURLSession (6.0.0):
     - OHHTTPStubs/Core
-  - OHHTTPStubs/OHPathHelpers (5.2.1)
-  - OHHTTPStubs/Swift (5.2.1):
-    - OHHTTPStubs/Core
-  - PINCache (3.0.1-beta)
-  - PINRemoteImage/Core (3.0.0-beta.3):
-    - PINCache (>= 3.0.0-beta)
-  - PINRemoteImage/iOS (3.0.0-beta.3):
+  - OHHTTPStubs/OHPathHelpers (6.0.0)
+  - OHHTTPStubs/Swift (6.0.0):
+    - OHHTTPStubs/Default
+  - PINCache (3.0.1-beta.4):
+    - PINCache/Arc-exception-safe (= 3.0.1-beta.4)
+    - PINCache/Core (= 3.0.1-beta.4)
+  - PINCache/Arc-exception-safe (3.0.1-beta.4):
+    - PINCache/Core
+  - PINCache/Core (3.0.1-beta.4):
+    - PINOperation (= 1.0.3)
+  - PINOperation (1.0.3)
+  - PINRemoteImage/Core (3.0.0-beta.8)
+  - PINRemoteImage/iOS (3.0.0-beta.8):
     - PINRemoteImage/Core
-  - SVProgressHUD (2.0.3)
+  - PINRemoteImage/PINCache (3.0.0-beta.8):
+    - PINCache (= 3.0.1-beta.4)
+    - PINRemoteImage/Core
+  - SVProgressHUD (2.1.2)
 
 DEPENDENCIES:
   - Alamofire
   - AsyncDisplayKit
   - Nimble
-  - ObjectMapper (from `https://github.com/Hearst-DD/ObjectMapper.git`, branch `swift-3`)
+  - ObjectMapper
   - OHHTTPStubs
   - OHHTTPStubs/Swift
   - SVProgressHUD
 
-EXTERNAL SOURCES:
-  ObjectMapper:
-    :branch: swift-3
-    :git: https://github.com/Hearst-DD/ObjectMapper.git
-
-CHECKOUT OPTIONS:
-  ObjectMapper:
-    :commit: 6ba230a37a4261bfad66ac573cc40b9d6c5c89f1
-    :git: https://github.com/Hearst-DD/ObjectMapper.git
-
 SPEC CHECKSUMS:
-  Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
-  AsyncDisplayKit: 926ded3ca3fb7026565e0e81f0e132fea4d3a6eb
-  Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19
-  ObjectMapper: a07ad0462c5adf014adc0f89ef04c29b626e855e
-  OHHTTPStubs: 3a42f25c00563b71355ac73112ba2324e9e6cef4
-  PINCache: 6911fe422a633e18b3d3ddf2bd4f0e55e36e2892
-  PINRemoteImage: 308731aa6534500e58fc211b9cc2bb7252df25ba
-  SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
+  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
+  AsyncDisplayKit: 2234dd8d8770a5ed72936b3f8394bd5a807765f6
+  Nimble: 657d000e11df8aebe27cdaf9d244de7f30ed87f7
+  ObjectMapper: 65abcfd9a61cf7396cbd14a4fb22fddfcc46577e
+  OHHTTPStubs: 752f9b11fd810a15162d50f11c06ff94f8e012eb
+  PINCache: a89c8f609232afac77128557bd12c861844423d7
+  PINOperation: ac23db44796d4a564ecf9b5ea7163510f579b71d
+  PINRemoteImage: c4f9f16932840c597f32e69dd288e10e111a1929
+  SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
 
-PODFILE CHECKSUM: 53c1cf80ab814f17a4373c3076326b627506aba8
+PODFILE CHECKSUM: 1f9f98f34f970b676e759db7163ac96168ddb6b1
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.2.1

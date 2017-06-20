@@ -7,7 +7,7 @@ inhibit_all_warnings!
 
 target 'taipeiAttractions' do
   pod 'Alamofire'
-  pod 'ObjectMapper', :git => 'https://github.com/Hearst-DD/ObjectMapper.git', :branch => 'swift-3'
+  pod 'ObjectMapper'
   pod 'AsyncDisplayKit'
   pod 'SVProgressHUD'
   

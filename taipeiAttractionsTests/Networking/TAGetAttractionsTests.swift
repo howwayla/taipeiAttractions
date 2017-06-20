@@ -47,7 +47,7 @@ class TAGetAttractionsTests: XCTestCase {
             expectation.fulfill()
         }
         
-        waitForExpectationsWithTimeout(100) { error in
+        waitForExpectations(timeout: 100) { error in
             expect(error).to(beNil())
         }
     }
@@ -64,8 +64,8 @@ class TAGetAttractionsTests: XCTestCase {
                 "sort":""
                 ]
             ]
-        stub(isHost("data.taipei")) { _ in
-            return OHHTTPStubsResponse(JSONObject: JSON, statusCode: 200, headers: nil)
+        stub(condition: isHost("data.taipei")) { _ in
+            return OHHTTPStubsResponse(jsonObject: JSON, statusCode: 200, headers: nil)
         }
         
         let expectation = self.expectation(description: "test get attractions success")
@@ -77,7 +77,7 @@ class TAGetAttractionsTests: XCTestCase {
             expectation.fulfill()
         }
         
-        waitForExpectationsWithTimeout(100) { error in
+        waitForExpectations(timeout: 100) { error in
             expect(error).to(beNil())
         }
     }
@@ -90,7 +90,7 @@ class TAGetAttractionsTests: XCTestCase {
         let notConnectedError = NSError(domain:NSURLErrorDomain,
                                         code:Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue),
                                         userInfo:nil)
-        stub(isHost("data.taipei")) { _ in
+        stub(condition: isHost("data.taipei")) { _ in
             return OHHTTPStubsResponse(error:notConnectedError)
         }
 
@@ -103,7 +103,7 @@ class TAGetAttractionsTests: XCTestCase {
             expectation.fulfill()
         }
         
-        waitForExpectationsWithTimeout(100) { error in
+        waitForExpectations(timeout: 100) { error in
             expect(error).to(beNil())
         }
     }
