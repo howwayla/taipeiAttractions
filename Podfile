@@ -10,17 +10,20 @@ target 'taipeiAttractions' do
   pod 'ObjectMapper'
   pod 'AsyncDisplayKit'
   pod 'SVProgressHUD'
-
+  
   target 'taipeiAttractionsTests' do
-    inherit! :search_paths
+    inherit! :search_paths  
+    pod 'Nimble'
     pod 'OHHTTPStubs'
     pod 'OHHTTPStubs/Swift'
-    pod 'Nimble'
+
   end
 end
 
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    puts target.name
-  end
-end
+ post_install do |installer|
+ 	installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['SWIFT_VERSION'] = '3.0'
+        end
+    end
+ end

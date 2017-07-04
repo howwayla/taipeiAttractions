@@ -1,19 +1,18 @@
-/*
- *  Copyright (c) 2014-present, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- *
- */
+//
+//  ASTextKitRenderer+TextChecking.mm
+//  AsyncDisplayKit
+//
+//  Copyright (c) 2014-present, Facebook, Inc.  All rights reserved.
+//  This source code is licensed under the BSD-style license found in the
+//  LICENSE file in the root directory of this source tree. An additional grant
+//  of patent rights can be found in the PATENTS file in the same directory.
+//
 
-#import "ASTextKitRenderer+TextChecking.h"
+#import <AsyncDisplayKit/ASTextKitRenderer+TextChecking.h>
 
-#import "ASTextKitAttributes.h"
-#import "ASTextKitEntityAttribute.h"
-#import "ASTextKitRenderer+Positioning.h"
-#import "ASTextKitTailTruncater.h"
+#import <AsyncDisplayKit/ASTextKitEntityAttribute.h>
+#import <AsyncDisplayKit/ASTextKitRenderer+Positioning.h>
+#import <AsyncDisplayKit/ASTextKitTailTruncater.h>
 
 @implementation ASTextKitTextCheckingResult
 

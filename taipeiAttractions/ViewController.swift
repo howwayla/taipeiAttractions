@@ -15,25 +15,26 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var reloadButton: UIButton! {
         didSet {
-            reloadButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+            reloadButton.layer.borderColor = UIColor.lightGray.cgColor
             reloadButton.layer.borderWidth = 1.0
             reloadButton.layer.cornerRadius = 5.0
         }
     }
-    private var tableView: ASTableView!
+    fileprivate var tableView: ASTableView!
     
     
-    private var attractions: [String : [TAAttraction]] = [:]
-    private var selectedCategory: String? {
+    fileprivate var attractions: [String : [TAAttractionCellController]] = [:]
+    fileprivate var selectedCategory: String? {
         didSet {
             attractions.removeAll()
             if let selectedCategory = selectedCategory {
                 title = selectedCategory
-                attractions[selectedCategory] = TAAppDataService.sharedInstance.attractionsByCategory[selectedCategory]
+                
+                attractions[selectedCategory] = TAAppDataService.sharedInstance.attractionsByCategory[selectedCategory]!.map(TAAttractionCellController.init)
                 
             } else {
                 title = "全部"
-                attractions = TAAppDataService.sharedInstance.attractionsByCategory
+                self.transformToAttractionCellControllers()
             }
             tableView.reloadData()
         }
@@ -54,23 +55,23 @@ class ViewController: UIViewController {
     }
     
     //MArk:- Setup methods
-    private func setupTableView() {
-        tableView = ASTableView(frame: CGRectZero)
+    fileprivate func setupTableView() {
+        tableView = ASTableView(frame: CGRect.zero)
         tableView.asyncDataSource = self
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.allowsSelection = false
         
         view.addSubview(tableView)
     }
     
-    private func setTableViewFrame() {
-        tableView.frame = CGRectMake(0, 0, view.frame.width, view.frame.height)
+    fileprivate func setTableViewFrame() {
+        tableView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
     }
     
-    private func setupNavigation() {
+    fileprivate func setupNavigation() {
         title = "全部"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter-icon"),
-                                                            style: .Plain,
+                                                            style: .plain,
                                                             target: self,
                                                             action: #selector(showFilterActionSheet))
     }
@@ -79,63 +80,72 @@ class ViewController: UIViewController {
 
 //MARK:- Actions
 extension ViewController {
-    private func fetchAttractions() {
+    fileprivate func fetchAttractions() {
         
-        SVProgressHUD.setDefaultMaskType(.Clear)
+        SVProgressHUD.setDefaultMaskType(.clear)
         SVProgressHUD.show()
         
         TAAttractionService.getAttractions(){ result in
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 switch result {
-                case .Success(_):
+                case .success(_):
                     self.fetchAttractionsDidSuccess()
-                case .Failure(_):
+                case .failure(_):
                     self.fetchAttractionsDidFail()
                 }
             }
         }
     }
     
-    private func fetchAttractionsDidSuccess() {
+    fileprivate func fetchAttractionsDidSuccess() {
         SVProgressHUD.dismiss()
         
-        navigationItem.rightBarButtonItem?.enabled = true
-        reloadButton.hidden = true
-        self.tableView.hidden = false
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        reloadButton.isHidden = true
+        self.tableView.isHidden = false
         
         //Set data and reload table view
-        attractions = TAAppDataService.sharedInstance.attractionsByCategory
+        self.transformToAttractionCellControllers()
         tableView.reloadData()
     }
     
-    private func fetchAttractionsDidFail() {
-        SVProgressHUD.showErrorWithStatus("載入失敗")
-        SVProgressHUD.dismissWithDelay(0.8)
+    fileprivate func transformToAttractionCellControllers() {
+        for  key in TAAppDataService.sharedInstance.attractionsByCategory.keys {
+            guard let attractions = TAAppDataService.sharedInstance.attractionsByCategory[key] else {
+                continue
+            }
+            self.attractions[key] = attractions.map(TAAttractionCellController.init)
+        }
+    }
+    
+    fileprivate func fetchAttractionsDidFail() {
+        SVProgressHUD.showError(withStatus: "載入失敗")
+        SVProgressHUD.dismiss(withDelay: 0.8)
         
-        navigationItem.rightBarButtonItem?.enabled = false
-        reloadButton.hidden = false
-        tableView.hidden = true
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        reloadButton.isHidden = false
+        tableView.isHidden = true
     }
     
     
-    @objc private func showFilterActionSheet() {
-        let actionSheet = UIAlertController(title: "選擇類別", message: nil, preferredStyle: .ActionSheet)
+    @objc fileprivate func showFilterActionSheet() {
+        let actionSheet = UIAlertController(title: "選擇類別", message: nil, preferredStyle: .actionSheet)
         
-        actionSheet.addAction(UIAlertAction(title: "全部", style: .Default) { _ in
+        actionSheet.addAction(UIAlertAction(title: "全部", style: .default) { _ in
             self.selectedCategory = nil
         })
         
         for category in TAAppDataService.sharedInstance.categories {
-            actionSheet.addAction(UIAlertAction(title: category, style: .Default) { _ in
+            actionSheet.addAction(UIAlertAction(title: category, style: .default) { _ in
                 self.selectedCategory = category
             })
         }
-        actionSheet.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-        presentViewController(actionSheet, animated: true, completion: nil)
+        actionSheet.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        present(actionSheet, animated: true, completion: nil)
     }
     
     
-    @IBAction func reloadData(sender: UIButton) {
+    @IBAction func reloadData(_ sender: UIButton) {
         fetchAttractions()
     }
 }
@@ -144,17 +154,17 @@ extension ViewController {
 //MARK:- ASTableViewDataSource
 extension ViewController: ASTableViewDataSource {
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return attractions.count
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let category = categoryString(section)
         return attractions[category]?.count ?? 0
     }
     
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // hide section header if user selected one category
         if selectedCategory != nil {
             return nil
@@ -163,16 +173,15 @@ extension ViewController: ASTableViewDataSource {
         return TAAppDataService.sharedInstance.categories[section]
     }
     
-    func tableView(tableView: ASTableView, nodeForRowAtIndexPath indexPath: NSIndexPath) -> ASCellNode {
+    func tableView(_ tableView: ASTableView, nodeForRowAt indexPath: IndexPath) -> ASCellNode {
         let category = categoryString(indexPath.section)
         let attraction = attractions[category]![indexPath.row]
-        let cellNdoe = TAAttractionCellNode(attraction: attraction)
+        let cellNdoe = TAAttractionCellNode(cellController: attraction)
         
         return cellNdoe
     }
     
-    
-    private func categoryString(section: Int) -> String {
+    fileprivate func categoryString(_ section: Int) -> String {
         var category: String!
         if selectedCategory != nil {
             category = selectedCategory

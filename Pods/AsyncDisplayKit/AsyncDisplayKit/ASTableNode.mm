@@ -1,25 +1,57 @@
 //
-//  ASTableNode.m
+//  ASTableNode.mm
 //  AsyncDisplayKit
 //
 //  Created by Steven Ramkumar on 11/4/15.
-//  Copyright © 2015 Facebook. All rights reserved.
+//
+//  Copyright (c) 2014-present, Facebook, Inc.  All rights reserved.
+//  This source code is licensed under the BSD-style license found in the
+//  LICENSE file in the root directory of this source tree. An additional grant
+//  of patent rights can be found in the PATENTS file in the same directory.
 //
 
-#import "ASEnvironmentInternal.h"
-#import "ASDisplayNode+Subclasses.h"
-#import "ASFlowLayoutController.h"
-#import "ASInternalHelpers.h"
-#import "ASRangeControllerUpdateRangeProtocol+Beta.h"
-#import "ASTableViewInternal.h"
+#import <AsyncDisplayKit/ASTableNode.h>
+#import <AsyncDisplayKit/ASTableViewInternal.h>
+#import <AsyncDisplayKit/ASDisplayNode+Subclasses.h>
+#import <AsyncDisplayKit/ASDisplayNode+FrameworkPrivate.h>
+#import <AsyncDisplayKit/ASInternalHelpers.h>
+#import <AsyncDisplayKit/ASCellNode+Internal.h>
+#import <AsyncDisplayKit/AsyncDisplayKit+Debug.h>
+#import <AsyncDisplayKit/ASTableView+Undeprecated.h>
+#import <AsyncDisplayKit/ASThread.h>
+#import <AsyncDisplayKit/ASDisplayNode+Beta.h>
+
+#pragma mark - _ASTablePendingState
 
 @interface _ASTablePendingState : NSObject
 @property (weak, nonatomic) id <ASTableDelegate>   delegate;
 @property (weak, nonatomic) id <ASTableDataSource> dataSource;
+@property (nonatomic, assign) ASLayoutRangeMode rangeMode;
+@property (nonatomic, assign) BOOL allowsSelection;
+@property (nonatomic, assign) BOOL allowsSelectionDuringEditing;
+@property (nonatomic, assign) BOOL allowsMultipleSelection;
+@property (nonatomic, assign) BOOL allowsMultipleSelectionDuringEditing;
+@property (nonatomic, assign) BOOL inverted;
 @end
 
 @implementation _ASTablePendingState
+- (instancetype)init
+{
+  self = [super init];
+  if (self) {
+    _rangeMode = ASLayoutRangeModeCount;
+    _allowsSelection = YES;
+    _allowsSelectionDuringEditing = NO;
+    _allowsMultipleSelection = NO;
+    _allowsMultipleSelectionDuringEditing = NO;
+    _inverted = NO;
+  }
+  return self;
+}
+
 @end
+
+#pragma mark - ASTableView
 
 @interface ASTableNode ()
 {
@@ -35,6 +67,8 @@
 
 @implementation ASTableNode
 
+#pragma mark Lifecycle
+
 - (instancetype)_initWithTableView:(ASTableView *)tableView
 {
   // Avoid a retain cycle.  In this case, the ASTableView is creating us, and strongly retains us.
@@ -48,8 +82,11 @@
 
 - (instancetype)_initWithFrame:(CGRect)frame style:(UITableViewStyle)style dataControllerClass:(Class)dataControllerClass
 {
+  __weak __typeof__(self) weakSelf = self;
   ASDisplayNodeViewBlock tableViewBlock = ^UIView *{
-    return [[ASTableView alloc] _initWithFrame:frame style:style dataControllerClass:dataControllerClass ownedByNode:YES];
+    // Variable will be unused if event logging is off.
+    __unused __typeof__(self) strongSelf = weakSelf;
+    return [[ASTableView alloc] _initWithFrame:frame style:style dataControllerClass:dataControllerClass eventLog:ASDisplayNodeGetEventLog(strongSelf)];
   };
 
   if (self = [super initWithViewBlock:tableViewBlock]) {
@@ -68,6 +105,8 @@
   return [self _initWithFrame:CGRectZero style:UITableViewStylePlain dataControllerClass:nil];
 }
 
+#pragma mark ASDisplayNode
+
 - (void)didLoad
 {
   [super didLoad];
@@ -80,25 +119,95 @@
     self.pendingState    = nil;
     view.asyncDelegate   = pendingState.delegate;
     view.asyncDataSource = pendingState.dataSource;
+    view.inverted        = pendingState.inverted;
+    view.allowsSelection = pendingState.allowsSelection;
+    view.allowsSelectionDuringEditing = pendingState.allowsSelectionDuringEditing;
+    view.allowsMultipleSelection = pendingState.allowsMultipleSelection;
+    view.allowsMultipleSelectionDuringEditing = pendingState.allowsMultipleSelectionDuringEditing;
+    if (pendingState.rangeMode != ASLayoutRangeModeCount) {
+      [view.rangeController updateCurrentRangeWithMode:pendingState.rangeMode];
+    }
   }
 }
 
-- (void)updateCurrentRangeWithMode:(ASLayoutRangeMode)rangeMode
+- (ASTableView *)view
 {
-    if (!self.isNodeLoaded) {
-        return;
-    }
-    
-    [self.view.rangeController updateCurrentRangeWithMode:rangeMode];
+  return (ASTableView *)[super view];
+}
+
+- (void)clearContents
+{
+  [super clearContents];
+  [self.rangeController clearContents];
+}
+
+- (void)didExitPreloadState
+{
+  [super didExitPreloadState];
+  [self.rangeController clearPreloadedData];
+}
+
+- (void)interfaceStateDidChange:(ASInterfaceState)newState fromState:(ASInterfaceState)oldState
+{
+  [super interfaceStateDidChange:newState fromState:oldState];
+  [ASRangeController layoutDebugOverlayIfNeeded];
+}
+
+#if ASRangeControllerLoggingEnabled
+- (void)didEnterVisibleState
+{
+  [super didEnterVisibleState];
+  NSLog(@"%@ - visible: YES", self);
+}
+
+- (void)didExitVisibleState
+{
+  [super didExitVisibleState];
+  NSLog(@"%@ - visible: NO", self);
+}
+#endif
+
+#pragma mark Setter / Getter
+
+// TODO: Implement this without the view.
+- (ASDataController *)dataController
+{
+  return self.view.dataController;
+}
+
+// TODO: Implement this without the view.
+- (ASRangeController *)rangeController
+{
+  return self.view.rangeController;
 }
 
 - (_ASTablePendingState *)pendingState
 {
   if (!_pendingState && ![self isNodeLoaded]) {
-    self.pendingState = [[_ASTablePendingState alloc] init];
+    _pendingState = [[_ASTablePendingState alloc] init];
   }
   ASDisplayNodeAssert(![self isNodeLoaded] || !_pendingState, @"ASTableNode should not have a pendingState once it is loaded");
   return _pendingState;
+}
+
+- (void)setInverted:(BOOL)inverted
+{
+  self.transform = inverted ? CATransform3DMakeScale(1, -1, 1)  : CATransform3DIdentity;
+  if ([self pendingState]) {
+    _pendingState.inverted = inverted;
+  } else {
+    ASDisplayNodeAssert([self isNodeLoaded], @"ASTableNode should be loaded if pendingState doesn't exist");
+    self.view.inverted = inverted;
+  }
+}
+
+- (BOOL)inverted
+{
+  if ([self pendingState]) {
+    return _pendingState.inverted;
+  } else {
+    return self.view.inverted;
+  }
 }
 
 - (void)setDelegate:(id <ASTableDelegate>)delegate
@@ -107,7 +216,15 @@
     _pendingState.delegate = delegate;
   } else {
     ASDisplayNodeAssert([self isNodeLoaded], @"ASTableNode should be loaded if pendingState doesn't exist");
-    self.view.asyncDelegate = delegate;
+
+    // Manually trampoline to the main thread. The view requires this be called on main
+    // and asserting here isn't an option – it is a common pattern for users to clear
+    // the delegate/dataSource in dealloc, which may be running on a background thread.
+    // It is important that we avoid retaining self in this block, so that this method is dealloc-safe.
+    ASTableView *view = self.view;
+    ASPerformBlockOnMainThread(^{
+      view.asyncDelegate = delegate;
+    });
   }
 }
 
@@ -126,7 +243,15 @@
     _pendingState.dataSource = dataSource;
   } else {
     ASDisplayNodeAssert([self isNodeLoaded], @"ASTableNode should be loaded if pendingState doesn't exist");
-    self.view.asyncDataSource = dataSource;
+
+    // Manually trampoline to the main thread. The view requires this be called on main
+    // and asserting here isn't an option – it is a common pattern for users to clear
+    // the delegate/dataSource in dealloc, which may be running on a background thread.
+    // It is important that we avoid retaining self in this block, so that this method is dealloc-safe.
+    ASTableView *view = self.view;
+    ASPerformBlockOnMainThread(^{
+      view.asyncDataSource = dataSource;
+    });
   }
 }
 
@@ -135,35 +260,368 @@
   if ([self pendingState]) {
     return _pendingState.dataSource;
   } else {
+    ASDisplayNodeAssert([self isNodeLoaded], @"ASTableNode should be loaded if pendingState doesn't exist");
     return self.view.asyncDataSource;
   }
 }
 
-- (ASTableView *)view
+- (void)setAllowsSelection:(BOOL)allowsSelection
 {
-  return (ASTableView *)[super view];
+  if ([self pendingState]) {
+    _pendingState.allowsSelection = allowsSelection;
+  } else {
+    ASDisplayNodeAssert([self isNodeLoaded], @"ASTableNode should be loaded if pendingState doesn't exist");
+    self.view.allowsSelection = allowsSelection;
+  }
 }
 
-#if ASRangeControllerLoggingEnabled
-- (void)visibilityDidChange:(BOOL)isVisible
+- (BOOL)allowsSelection
 {
-  [super visibilityDidChange:isVisible];
-  NSLog(@"%@ - visible: %d", self, isVisible);
-}
-#endif
-
-- (void)clearContents
-{
-  [super clearContents];
-  [self.view clearContents];
+  if ([self pendingState]) {
+    return _pendingState.allowsSelection;
+  } else {
+    return self.view.allowsSelection;
+  }
 }
 
-- (void)clearFetchedData
+- (void)setAllowsSelectionDuringEditing:(BOOL)allowsSelectionDuringEditing
 {
-  [super clearFetchedData];
-  [self.view clearFetchedData];
+  if ([self pendingState]) {
+    _pendingState.allowsSelectionDuringEditing = allowsSelectionDuringEditing;
+  } else {
+    ASDisplayNodeAssert([self isNodeLoaded], @"ASTableNode should be loaded if pendingState doesn't exist");
+    self.view.allowsSelectionDuringEditing = allowsSelectionDuringEditing;
+  }
 }
 
-ASEnvironmentCollectionTableSetEnvironmentState(_environmentStateLock)
+- (BOOL)allowsSelectionDuringEditing
+{
+  if ([self pendingState]) {
+    return _pendingState.allowsSelectionDuringEditing;
+  } else {
+    return self.view.allowsSelectionDuringEditing;
+  }
+}
+
+- (void)setAllowsMultipleSelection:(BOOL)allowsMultipleSelection
+{
+  if ([self pendingState]) {
+    _pendingState.allowsMultipleSelection = allowsMultipleSelection;
+  } else {
+    ASDisplayNodeAssert([self isNodeLoaded], @"ASTableNode should be loaded if pendingState doesn't exist");
+    self.view.allowsMultipleSelection = allowsMultipleSelection;
+  }
+}
+
+- (BOOL)allowsMultipleSelection
+{
+  if ([self pendingState]) {
+    return _pendingState.allowsMultipleSelection;
+  } else {
+    return self.view.allowsMultipleSelection;
+  }
+}
+
+- (void)setAllowsMultipleSelectionDuringEditing:(BOOL)allowsMultipleSelectionDuringEditing
+{
+  if ([self pendingState]) {
+    _pendingState.allowsMultipleSelectionDuringEditing = allowsMultipleSelectionDuringEditing;
+  } else {
+    ASDisplayNodeAssert([self isNodeLoaded], @"ASTableNode should be loaded if pendingState doesn't exist");
+    self.view.allowsMultipleSelectionDuringEditing = allowsMultipleSelectionDuringEditing;
+  }
+}
+
+- (BOOL)allowsMultipleSelectionDuringEditing
+{
+  if ([self pendingState]) {
+    return _pendingState.allowsMultipleSelectionDuringEditing;
+  } else {
+    return self.view.allowsMultipleSelectionDuringEditing;
+  }
+}
+
+#pragma mark ASRangeControllerUpdateRangeProtocol
+
+- (void)updateCurrentRangeWithMode:(ASLayoutRangeMode)rangeMode
+{
+  if ([self pendingState]) {
+    _pendingState.rangeMode = rangeMode;
+  } else {
+    ASDisplayNodeAssert([self isNodeLoaded], @"ASTableNode should be loaded if pendingState doesn't exist");
+    [self.rangeController updateCurrentRangeWithMode:rangeMode];
+  }
+}
+
+#pragma mark ASEnvironment
+
+ASLayoutElementCollectionTableSetTraitCollection(_environmentStateLock)
+
+#pragma mark - Range Tuning
+
+- (ASRangeTuningParameters)tuningParametersForRangeType:(ASLayoutRangeType)rangeType
+{
+  return [self.rangeController tuningParametersForRangeMode:ASLayoutRangeModeFull rangeType:rangeType];
+}
+
+- (void)setTuningParameters:(ASRangeTuningParameters)tuningParameters forRangeType:(ASLayoutRangeType)rangeType
+{
+  [self.rangeController setTuningParameters:tuningParameters forRangeMode:ASLayoutRangeModeFull rangeType:rangeType];
+}
+
+- (ASRangeTuningParameters)tuningParametersForRangeMode:(ASLayoutRangeMode)rangeMode rangeType:(ASLayoutRangeType)rangeType
+{
+  return [self.rangeController tuningParametersForRangeMode:rangeMode rangeType:rangeType];
+}
+
+- (void)setTuningParameters:(ASRangeTuningParameters)tuningParameters forRangeMode:(ASLayoutRangeMode)rangeMode rangeType:(ASLayoutRangeType)rangeType
+{
+  return [self.rangeController setTuningParameters:tuningParameters forRangeMode:rangeMode rangeType:rangeType];
+}
+
+#pragma mark - Selection
+
+- (void)selectRowAtIndexPath:(nullable NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition
+{
+  ASDisplayNodeAssertMainThread();
+  ASTableView *tableView = self.view;
+
+  indexPath = [tableView convertIndexPathFromTableNode:indexPath waitingIfNeeded:YES];
+  if (indexPath != nil) {
+    [tableView selectRowAtIndexPath:indexPath animated:animated scrollPosition:scrollPosition];
+  } else {
+    NSLog(@"Failed to select row at index path %@ because the row never reached the view.", indexPath);
+  }
+
+}
+
+- (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated
+{
+  ASDisplayNodeAssertMainThread();
+  ASTableView *tableView = self.view;
+
+  indexPath = [tableView convertIndexPathFromTableNode:indexPath waitingIfNeeded:YES];
+  if (indexPath != nil) {
+    [tableView deselectRowAtIndexPath:indexPath animated:animated];
+  } else {
+    NSLog(@"Failed to deselect row at index path %@ because the row never reached the view.", indexPath);
+  }
+}
+
+- (void)scrollToRowAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated
+{
+  ASDisplayNodeAssertMainThread();
+  ASTableView *tableView = self.view;
+
+  indexPath = [tableView convertIndexPathFromTableNode:indexPath waitingIfNeeded:YES];
+
+  if (indexPath != nil) {
+    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:animated];
+  } else {
+    NSLog(@"Failed to scroll to row at index path %@ because the row never reached the view.", indexPath);
+  }
+}
+
+#pragma mark - Querying Data
+
+- (void)reloadDataInitiallyIfNeeded
+{
+  ASDisplayNodeAssertMainThread();
+  if (!self.dataController.initialReloadDataHasBeenCalled) {
+    // Note: Just calling reloadData isn't enough here – we need to
+    // ensure that _nodesConstrainedWidth is updated first.
+    [self.view layoutIfNeeded];
+  }
+}
+
+- (NSInteger)numberOfRowsInSection:(NSInteger)section
+{
+  ASDisplayNodeAssertMainThread();
+  [self reloadDataInitiallyIfNeeded];
+  return [self.dataController numberOfRowsInSection:section];
+}
+
+- (NSInteger)numberOfSections
+{
+  ASDisplayNodeAssertMainThread();
+  [self reloadDataInitiallyIfNeeded];
+  return [self.dataController numberOfSections];
+}
+
+- (NSArray<__kindof ASCellNode *> *)visibleNodes
+{
+  ASDisplayNodeAssertMainThread();
+  return self.isNodeLoaded ? [self.view visibleNodes] : @[];
+}
+
+- (NSIndexPath *)indexPathForNode:(ASCellNode *)cellNode
+{
+  return [self.dataController indexPathForNode:cellNode];
+}
+
+- (ASCellNode *)nodeForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  [self reloadDataInitiallyIfNeeded];
+  return [self.dataController nodeAtIndexPath:indexPath];
+}
+
+- (CGRect)rectForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  ASDisplayNodeAssertMainThread();
+  ASTableView *tableView = self.view;
+
+  indexPath = [tableView convertIndexPathFromTableNode:indexPath waitingIfNeeded:YES];
+  return [tableView rectForRowAtIndexPath:indexPath];
+}
+
+- (nullable __kindof UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  ASDisplayNodeAssertMainThread();
+  ASTableView *tableView = self.view;
+
+  indexPath = [tableView convertIndexPathFromTableNode:indexPath waitingIfNeeded:YES];
+  if (indexPath == nil) {
+    return nil;
+  }
+  return [tableView cellForRowAtIndexPath:indexPath];
+}
+
+- (nullable NSIndexPath *)indexPathForSelectedRow
+{
+  ASDisplayNodeAssertMainThread();
+  ASTableView *tableView = self.view;
+
+  NSIndexPath *indexPath = tableView.indexPathForSelectedRow;
+  if (indexPath != nil) {
+    return [tableView convertIndexPathToTableNode:indexPath];
+  }
+  return indexPath;
+}
+
+- (NSArray<NSIndexPath *> *)indexPathsForSelectedRows
+{
+  ASDisplayNodeAssertMainThread();
+  ASTableView *tableView = self.view;
+
+  return [tableView convertIndexPathsToTableNode:tableView.indexPathsForSelectedRows];
+}
+
+- (nullable NSIndexPath *)indexPathForRowAtPoint:(CGPoint)point
+{
+  ASDisplayNodeAssertMainThread();
+  ASTableView *tableView = self.view;
+
+  NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:point];
+  if (indexPath != nil) {
+    return [tableView convertIndexPathToTableNode:indexPath];
+  }
+  return indexPath;
+}
+
+- (nullable NSArray<NSIndexPath *> *)indexPathsForRowsInRect:(CGRect)rect
+{
+  ASDisplayNodeAssertMainThread();
+  ASTableView *tableView = self.view;
+  return [tableView convertIndexPathsToTableNode:[tableView indexPathsForRowsInRect:rect]];
+}
+
+- (NSArray<NSIndexPath *> *)indexPathsForVisibleRows
+{
+  ASDisplayNodeAssertMainThread();
+  NSMutableArray *indexPathsArray = [NSMutableArray new];
+  for (ASCellNode *cell in [self visibleNodes]) {
+    NSIndexPath *indexPath = [self indexPathForNode:cell];
+    if (indexPath) {
+      [indexPathsArray addObject:indexPath];
+    }
+  }
+  return indexPathsArray;
+}
+
+#pragma mark - Editing
+
+- (void)reloadDataWithCompletion:(void (^)())completion
+{
+  [self.view reloadDataWithCompletion:completion];
+}
+
+- (void)reloadData
+{
+  [self reloadDataWithCompletion:nil];
+}
+
+- (void)relayoutItems
+{
+  [self.view relayoutItems];
+}
+
+- (void)performBatchAnimated:(BOOL)animated updates:(void (^)())updates completion:(void (^)(BOOL))completion
+{
+  [self.view beginUpdates];
+  if (updates) {
+    updates();
+  }
+  [self.view endUpdatesAnimated:animated completion:completion];
+}
+
+- (void)performBatchUpdates:(void (^)())updates completion:(void (^)(BOOL))completion
+{
+  [self performBatchAnimated:YES updates:updates completion:completion];
+}
+
+- (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+  [self.view insertSections:sections withRowAnimation:animation];
+}
+
+- (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+  [self.view deleteSections:sections withRowAnimation:animation];
+}
+
+- (void)reloadSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+  [self.view reloadSections:sections withRowAnimation:animation];
+}
+
+- (void)moveSection:(NSInteger)section toSection:(NSInteger)newSection
+{
+  [self.view moveSection:section toSection:newSection];
+}
+
+- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
+{
+  [self.view insertRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+}
+
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
+{
+  [self.view deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+}
+
+- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
+{
+  [self.view reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+}
+
+- (void)moveRowAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)newIndexPath
+{
+  [self.view moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
+}
+
+- (void)waitUntilAllUpdatesAreCommitted
+{
+  [self.view waitUntilAllUpdatesAreCommitted];
+}
+
+#pragma mark - Debugging (Private)
+
+- (NSMutableArray<NSDictionary *> *)propertiesForDebugDescription
+{
+  NSMutableArray<NSDictionary *> *result = [super propertiesForDebugDescription];
+  [result addObject:@{ @"dataSource" : ASObjectDescriptionMakeTiny(self.dataSource) }];
+  [result addObject:@{ @"delegate" : ASObjectDescriptionMakeTiny(self.delegate) }];
+  return result;
+}
 
 @end

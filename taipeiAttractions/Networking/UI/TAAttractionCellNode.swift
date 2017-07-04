@@ -16,77 +16,77 @@ extension UIColor {
     }
 }
 
+extension TAAttractionCellNode: CellConfigurable{}
 
 class TAAttractionCellNode: ASCellNode {
     
-    var attraction: TAAttraction!
-    
-    private let titleNode = ASTextNode()
-    private let descriptionNode = ASTextNode()
-    private var photoNode: ASNetworkImageNode?
+    var cellController: TAAttractionCellController!
+    fileprivate let titleNode = ASTextNode()
+    fileprivate let descriptionNode = ASTextNode()
+    fileprivate var photoNode: ASNetworkImageNode?
     
     struct TextStyle {
-        static let title = [NSFontAttributeName: UIFont.boldSystemFontOfSize(17),
+        static let title = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 17),
                             NSForegroundColorAttributeName: UIColor.TAAttractionCellTitle()]
         
-        static let description = [NSFontAttributeName: UIFont.systemFontOfSize(13),
-                                  NSForegroundColorAttributeName: UIColor.darkGrayColor()]
+        static let description = [NSFontAttributeName: UIFont.systemFont(ofSize: 13),
+                                  NSForegroundColorAttributeName: UIColor.darkGray]
     }
     
-    init(attraction: TAAttraction) {
+    init(cellController: TAAttractionCellController) {
         super.init()
         
-        self.attraction = attraction
+        self.cellController = cellController
 
         setupTitleNode()
         setupDescriptionNode()
         setupPhotoNodeIfNeeded()
     }
     
-    private func setupTitleNode() {
-        titleNode.attributedString = NSAttributedString(string: attraction.title!, attributes: TextStyle.title)
+    fileprivate func setupTitleNode() {
+        titleNode.attributedString = NSAttributedString(string: cellController.title, attributes: TextStyle.title)
         addSubnode(titleNode)
     }
     
-    private func setupDescriptionNode() {
+    fileprivate func setupDescriptionNode() {
         var attributes = TextStyle.description
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 5.0
         
         attributes[NSParagraphStyleAttributeName] = paragraphStyle
-        descriptionNode.attributedString = NSAttributedString(string: attraction.description!, attributes: attributes)
+        descriptionNode.attributedString = NSAttributedString(string: cellController.description, attributes: attributes)
         addSubnode(descriptionNode)
     }
     
-    private func setupPhotoNodeIfNeeded() {
+    fileprivate func setupPhotoNodeIfNeeded() {
         
-        if let photoURL = attraction.photoURL?.first {
+        if let photoURL = cellController.photoURL {
             photoNode = ASNetworkImageNode()
-            photoNode?.URL = photoURL
+            photoNode?.url = photoURL
             photoNode?.shouldCacheImage = true
             addSubnode(photoNode!)
         }
     }
     
     //MARK:- Layout
-    override func layoutSpecThatFits(constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let screenWidth = UIScreen.mainScreen().bounds.width
+    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        let screenWidth = UIScreen.main.bounds.width
         
-        let textLayout = ASStackLayoutSpec(direction: .Vertical,
+        let textLayout = ASStackLayoutSpec(direction: .vertical,
                                            spacing: 5.0,
-                                           justifyContent: .Start,
-                                           alignItems: .Start,
+                                           justifyContent: .start,
+                                           alignItems: .start,
                                            children: [titleNode, descriptionNode])
 
         let textInsetLayout = ASInsetLayoutSpec(insets: UIEdgeInsetsMake(8, 8, 25, 8), child: textLayout)
         
         if let photoNode = photoNode {
-            photoNode.preferredFrameSize = CGSizeMake(screenWidth, 300)
-            let photoAndTextLayout = ASStackLayoutSpec(direction: .Vertical,
+            photoNode.preferredFrameSize = CGSize(width: screenWidth, height: 300)
+            let photoAndTextLayout = ASStackLayoutSpec(direction: .vertical,
                                                        spacing: 0.0,
-                                                       justifyContent: .Start,
-                                                       alignItems: .Start,
+                                                       justifyContent: .start,
+                                                       alignItems: .start,
                                                        children: [photoNode, textInsetLayout])
             return photoAndTextLayout
         } else {

@@ -1,22 +1,29 @@
 //
-//  ASImageNode+AnimatedImage.m
+//  ASImageNode+AnimatedImage.mm
 //  AsyncDisplayKit
 //
 //  Created by Garrett Moon on 3/22/16.
-//  Copyright © 2016 Facebook. All rights reserved.
+//
+//  Copyright (c) 2014-present, Facebook, Inc.  All rights reserved.
+//  This source code is licensed under the BSD-style license found in the
+//  LICENSE file in the root directory of this source tree. An additional grant
+//  of patent rights can be found in the PATENTS file in the same directory.
 //
 
-#import "ASImageNode.h"
+#import <AsyncDisplayKit/ASImageNode.h>
 
-#import "ASAssert.h"
-#import "ASImageProtocols.h"
-#import "ASDisplayNode+Subclasses.h"
-#import "ASDisplayNodeExtras.h"
-#import "ASEqualityHelpers.h"
-#import "ASDisplayNode+FrameworkPrivate.h"
-#import "ASImageNode+AnimatedImagePrivate.h"
-#import "ASInternalHelpers.h"
-#import "ASWeakProxy.h"
+#import <AsyncDisplayKit/ASAssert.h>
+#import <AsyncDisplayKit/ASBaseDefines.h>
+#import <AsyncDisplayKit/ASDisplayNode+Subclasses.h>
+#import <AsyncDisplayKit/ASDisplayNodeExtras.h>
+#import <AsyncDisplayKit/ASEqualityHelpers.h>
+#import <AsyncDisplayKit/ASImageNode+AnimatedImagePrivate.h>
+#import <AsyncDisplayKit/ASImageProtocols.h>
+#import <AsyncDisplayKit/ASInternalHelpers.h>
+#import <AsyncDisplayKit/ASNetworkImageNode.h>
+#import <AsyncDisplayKit/ASWeakProxy.h>
+
+NSString *const ASAnimatedImageDefaultRunLoopMode = NSRunLoopCommonModes;
 
 @implementation ASImageNode (AnimatedImage)
 
@@ -39,6 +46,10 @@
       };
     }
     
+    if (animatedImage.playbackReady) {
+      [self animatedImageFileReady];
+    }
+
     animatedImage.playbackReadyCallback = ^{
       [weakSelf animatedImageFileReady];
     };
@@ -81,8 +92,40 @@
   }
   
   if (setCoverImage) {
+    [self setCoverImage:coverImage];
+  }
+}
+
+- (void)setCoverImage:(UIImage *)coverImage
+{
+  //If we're a network image node, we want to set the default image so
+  //that it will correctly be restored if it exits the range.
+  if ([self isKindOfClass:[ASNetworkImageNode class]]) {
+    [(ASNetworkImageNode *)self setDefaultImage:coverImage];
+  } else {
     self.image = coverImage;
   }
+}
+
+- (NSString *)animatedImageRunLoopMode
+{
+  ASDN::MutexLocker l(_displayLinkLock);
+  return _animatedImageRunLoopMode;
+}
+
+- (void)setAnimatedImageRunLoopMode:(NSString *)runLoopMode
+{
+  ASDN::MutexLocker l(_displayLinkLock);
+
+  if (runLoopMode == nil) {
+    runLoopMode = ASAnimatedImageDefaultRunLoopMode;
+  }
+
+  if (_displayLink != nil) {
+    [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:_animatedImageRunLoopMode];
+    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:runLoopMode];
+  }
+  _animatedImageRunLoopMode = runLoopMode;
 }
 
 - (void)animatedImageFileReady
@@ -116,7 +159,7 @@
     _displayLink = [CADisplayLink displayLinkWithTarget:[ASWeakProxy weakProxyWithTarget:self] selector:@selector(displayLinkFired:)];
     _displayLink.frameInterval = self.animatedImage.frameInterval;
     
-    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:_animatedImageRunLoopMode];
   } else {
     _displayLink.paused = NO;
   }
@@ -135,19 +178,23 @@
   [self.animatedImage clearAnimatedImageCache];
 }
 
-- (void)visibilityDidChange:(BOOL)isVisible
+- (void)didEnterVisibleState
 {
-  [super visibilityDidChange:isVisible];
-  
   ASDisplayNodeAssertMainThread();
-  if (isVisible) {
-    if (self.animatedImage.coverImageReady) {
-      self.image = self.animatedImage.coverImage;
-    }
-    [self startAnimating];
-  } else {
-    [self stopAnimating];
+  [super didEnterVisibleState];
+  
+  if (self.animatedImage.coverImageReady) {
+    [self setCoverImage:self.animatedImage.coverImage];
   }
+  [self startAnimating];
+}
+
+- (void)didExitVisibleState
+{
+  ASDisplayNodeAssertMainThread();
+  [super didExitVisibleState];
+  
+  [self stopAnimating];
 }
 
 - (void)displayLinkFired:(CADisplayLink *)displayLink
@@ -202,7 +249,11 @@
   return frameIndex;
 }
 
-- (void)dealloc
+@end
+
+@implementation ASImageNode(AnimatedImageInvalidation)
+
+- (void)invalidateAnimatedImage
 {
   ASDN::MutexLocker l(_displayLinkLock);
 #if ASAnimatedImageDebug

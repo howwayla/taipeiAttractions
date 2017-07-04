@@ -1,21 +1,23 @@
 //
-//  ASViewController.m
+//  ASViewController.mm
 //  AsyncDisplayKit
 //
 //  Created by Huy Nguyen on 16/09/15.
-//  Copyright (c) 2015 Facebook. All rights reserved.
+//
+//  Copyright (c) 2014-present, Facebook, Inc.  All rights reserved.
+//  This source code is licensed under the BSD-style license found in the
+//  LICENSE file in the root directory of this source tree. An additional grant
+//  of patent rights can be found in the PATENTS file in the same directory.
 //
 
-#import "ASViewController.h"
-#import "ASAssert.h"
-#import "ASAvailability.h"
-#import "ASDimension.h"
-#import "ASDisplayNodeInternal.h"
-#import "ASDisplayNode+FrameworkPrivate.h"
-#import "ASDisplayNode+Beta.h"
-#import "ASTraitCollection.h"
-#import "ASEnvironmentInternal.h"
-#import "ASRangeControllerUpdateRangeProtocol+Beta.h"
+#import <AsyncDisplayKit/ASViewController.h>
+#import <AsyncDisplayKit/ASAssert.h>
+#import <AsyncDisplayKit/ASAvailability.h>
+#import <AsyncDisplayKit/ASDisplayNode+FrameworkPrivate.h>
+#import <AsyncDisplayKit/ASLayout.h>
+#import <AsyncDisplayKit/ASTraitCollection.h>
+#import <AsyncDisplayKit/ASRangeControllerUpdateRangeProtocol+Beta.h>
+#import <AsyncDisplayKit/ASInternalHelpers.h>
 
 #define AS_LOG_VISIBILITY_CHANGES 0
 
@@ -25,18 +27,30 @@
   BOOL _automaticallyAdjustRangeModeBasedOnViewEvents;
   BOOL _parentManagesVisibilityDepth;
   NSInteger _visibilityDepth;
+  BOOL _selfConformsToRangeModeProtocol;
+  BOOL _nodeConformsToRangeModeProtocol;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-  ASDisplayNodeAssert(NO, @"ASViewController requires using -initWithNode:");
-  return [self initWithNode:[[ASDisplayNode alloc] init]];
+  if (!(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
+    return nil;
+  }
+  
+  [self _initializeInstance];
+  
+  return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-  ASDisplayNodeAssert(NO, @"ASViewController requires using -initWithNode:");
-  return [self initWithNode:[[ASDisplayNode alloc] init]];
+  if (!(self = [super initWithCoder:aDecoder])) {
+    return nil;
+  }
+  
+  [self _initializeInstance];
+  
+  return self;
 }
 
 - (instancetype)initWithNode:(ASDisplayNode *)node
@@ -45,35 +59,57 @@
     return nil;
   }
   
-  ASDisplayNodeAssertNotNil(node, @"Node must not be nil");
-  ASDisplayNodeAssertTrue(!node.layerBacked);
   _node = node;
-
-  _automaticallyAdjustRangeModeBasedOnViewEvents = NO;
+  [self _initializeInstance];
 
   return self;
 }
 
+- (void)_initializeInstance
+{
+  if (_node == nil) {
+    return;
+  }
+  
+  _selfConformsToRangeModeProtocol = [self conformsToProtocol:@protocol(ASRangeControllerUpdateRangeProtocol)];
+  _nodeConformsToRangeModeProtocol = [_node conformsToProtocol:@protocol(ASRangeControllerUpdateRangeProtocol)];
+  _automaticallyAdjustRangeModeBasedOnViewEvents = _selfConformsToRangeModeProtocol || _nodeConformsToRangeModeProtocol;
+  
+  // In case the node will get loaded
+  if (_node.nodeLoaded) {
+    // Node already loaded the view
+    [self view];
+  } else {
+    // If the node didn't load yet add ourselves as on did load observer to load the view in case the node gets loaded
+    // before the view controller
+    __weak __typeof__(self) weakSelf = self;
+    [_node onDidLoad:^(__kindof ASDisplayNode * _Nonnull node) {
+      if ([weakSelf isViewLoaded] == NO) {
+        [weakSelf view];
+      }
+    }];
+  }
+}
+
 - (void)dealloc
 {
-  if (_traitCollectionContext != nil) {
-    // The setter will iterate through the VC's subnodes and replace the traitCollectionContext in their ASEnvironmentTraitCollection with nil.
-    // Since the VC holds the only strong reference to this context and we are in the process of destroying
-    // the VC, all the references in the subnodes will be unsafe unless we nil them out. More than likely all the subnodes will be dealloc'ed
-    // as part of the VC being dealloc'ed, but this is just to make extra sure.
-    self.traitCollectionContext = nil;
-  }
+  ASPerformBackgroundDeallocation(_node);
 }
 
 - (void)loadView
 {
-  ASDisplayNodeAssertTrue(!_node.layerBacked);
-  
   // Apple applies a frame and autoresizing masks we need.  Allocating a view is not
   // nearly as expensive as adding and removing it from a hierarchy, and fortunately
   // we can avoid that here.  Enabling layerBacking on a single node in the hierarchy
   // will have a greater performance benefit than the impact of this transient view.
   [super loadView];
+  
+  if (_node == nil) {
+    return;
+  }
+  
+  ASDisplayNodeAssertTrue(!_node.layerBacked);
+  
   UIView *view = self.view;
   CGRect frame = view.frame;
   UIViewAutoresizing autoresizingMask = view.autoresizingMask;
@@ -86,23 +122,41 @@
   
   // ensure that self.node has a valid trait collection before a subclass's implementation of viewDidLoad.
   // Any subnodes added in viewDidLoad will then inherit the proper environment.
-  if (AS_AT_LEAST_IOS8) {
-    ASEnvironmentTraitCollection traitCollection = [self environmentTraitCollectionForUITraitCollection:self.traitCollection];
-    [self progagateNewEnvironmentTraitCollection:traitCollection];
-  }
+  ASPrimitiveTraitCollection traitCollection = [self primitiveTraitCollectionForUITraitCollection:self.traitCollection];
+  [self propagateNewTraitCollection:traitCollection];
 }
 
 - (void)viewWillLayoutSubviews
 {
   [super viewWillLayoutSubviews];
-  [_node measureWithSizeRange:[self nodeConstrainedSize]];
+  
+  // Before layout, make sure that our trait collection containerSize actually matches the size of our bounds.
+  // If not, we need to update the traits and propagate them.
+
+  CGSize boundsSize = self.view.bounds.size;
+  if (CGSizeEqualToSize(self.node.primitiveTraitCollection.containerSize, boundsSize) == NO) {
+    [UIView performWithoutAnimation:^{
+      ASPrimitiveTraitCollection traitCollection = [self primitiveTraitCollectionForUITraitCollection:self.traitCollection];
+      traitCollection.containerSize = boundsSize;
+        
+      // this method will call measure
+      [self propagateNewTraitCollection:traitCollection];
+    }];
+  } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    // Call layoutThatFits: to let the node prepare for a layout that will happen shortly in the layout pass of the view.
+    // If the node's constrained size didn't change between the last layout pass it's a no-op
+    [_node layoutThatFits:[self nodeConstrainedSize]];
+#pragma clang diagnostic pop
+  }
 }
 
 - (void)viewDidLayoutSubviews
 {
   if (_ensureDisplayed && self.neverShowPlaceholders) {
     _ensureDisplayed = NO;
-    [self.node recursivelyEnsureDisplaySynchronously:YES];
+    [_node recursivelyEnsureDisplaySynchronously:YES];
   }
   [super viewDidLayoutSubviews];
 }
@@ -113,8 +167,11 @@ ASVisibilityDidMoveToParentViewController;
 {
   [super viewWillAppear:animated];
   _ensureDisplayed = YES;
-  [_node measureWithSizeRange:[self nodeConstrainedSize]];
-  [_node recursivelyFetchData];
+
+  // A layout pass is forced this early to get nodes like ASCollectionNode, ASTableNode etc.
+  // into the hierarchy before UIKit applies the scroll view inset adjustments, if automatic subnode management
+  // is enabled. Otherwise the insets would not be applied.
+  [_node.view layoutIfNeeded];
   
   if (_parentManagesVisibilityDepth == NO) {
     [self setVisibilityDepth:0];
@@ -166,26 +223,36 @@ ASVisibilityDepthImplementation;
 
 - (void)setAutomaticallyAdjustRangeModeBasedOnViewEvents:(BOOL)automaticallyAdjustRangeModeBasedOnViewEvents
 {
-  _automaticallyAdjustRangeModeBasedOnViewEvents = automaticallyAdjustRangeModeBasedOnViewEvents;
+  if (automaticallyAdjustRangeModeBasedOnViewEvents != _automaticallyAdjustRangeModeBasedOnViewEvents) {
+    if (automaticallyAdjustRangeModeBasedOnViewEvents && _selfConformsToRangeModeProtocol == NO && _nodeConformsToRangeModeProtocol == NO) {
+      NSLog(@"Warning: automaticallyAdjustRangeModeBasedOnViewEvents set to YES in %@, but range mode updating is not possible because neither view controller nor node %@ conform to ASRangeControllerUpdateRangeProtocol.", self, _node);
+    }
+    _automaticallyAdjustRangeModeBasedOnViewEvents = automaticallyAdjustRangeModeBasedOnViewEvents;
+  }
 }
 
 - (void)updateCurrentRangeModeWithModeIfPossible:(ASLayoutRangeMode)rangeMode
 {
-  if (!_automaticallyAdjustRangeModeBasedOnViewEvents) { return; }
-  if (![_node conformsToProtocol:@protocol(ASRangeControllerUpdateRangeProtocol)]) {
+  if (!_automaticallyAdjustRangeModeBasedOnViewEvents) {
     return;
   }
-
-  id<ASRangeControllerUpdateRangeProtocol> updateRangeNode = (id<ASRangeControllerUpdateRangeProtocol>)_node;
-  [updateRangeNode updateCurrentRangeWithMode:rangeMode];
+  
+  if (_selfConformsToRangeModeProtocol) {
+    id<ASRangeControllerUpdateRangeProtocol> rangeUpdater = (id<ASRangeControllerUpdateRangeProtocol>)self;
+    [rangeUpdater updateCurrentRangeWithMode:rangeMode];
+  }
+  
+  if (_nodeConformsToRangeModeProtocol) {
+    id<ASRangeControllerUpdateRangeProtocol> rangeUpdater = (id<ASRangeControllerUpdateRangeProtocol>)_node;
+    [rangeUpdater updateCurrentRangeWithMode:rangeMode];
+  }
 }
 
 #pragma mark - Layout Helpers
 
 - (ASSizeRange)nodeConstrainedSize
 {
-  CGSize viewSize = self.view.bounds.size;
-  return ASSizeRangeMake(viewSize, viewSize);
+  return ASSizeRangeMake(self.view.bounds.size);
 }
 
 - (ASInterfaceState)interfaceState
@@ -193,56 +260,39 @@ ASVisibilityDepthImplementation;
   return _node.interfaceState;
 }
 
-#pragma mark - ASEnvironmentTraitCollection
+#pragma mark - ASTraitEnvironment
 
-- (void)setTraitCollectionContext:(id)traitCollectionContext
-{
-  if (_traitCollectionContext != traitCollectionContext) {
-    // nil out the displayContext in the subnodes so they aren't hanging around with a dealloc'ed pointer don't set
-    // the new context yet as this will cause ASEnvironmentTraitCollectionIsEqualToASEnvironmentTraitCollection to fail
-    ASEnvironmentTraitCollectionUpdateDisplayContext(self.node, nil);
-    
-    _traitCollectionContext = traitCollectionContext;
-  }
-}
-
-- (ASEnvironmentTraitCollection)environmentTraitCollectionForUITraitCollection:(UITraitCollection *)traitCollection
+- (ASPrimitiveTraitCollection)primitiveTraitCollectionForUITraitCollection:(UITraitCollection *)traitCollection
 {
   if (self.overrideDisplayTraitsWithTraitCollection) {
     ASTraitCollection *asyncTraitCollection = self.overrideDisplayTraitsWithTraitCollection(traitCollection);
-    self.traitCollectionContext = asyncTraitCollection.traitCollectionContext;
-    return [asyncTraitCollection environmentTraitCollection];
+    return [asyncTraitCollection primitiveTraitCollection];
   }
   
-  ASEnvironmentTraitCollection asyncTraitCollection = ASEnvironmentTraitCollectionFromUITraitCollection(traitCollection);
-  asyncTraitCollection.displayContext = self.traitCollectionContext;
+  ASDisplayNodeAssertMainThread();
+  ASPrimitiveTraitCollection asyncTraitCollection = ASPrimitiveTraitCollectionFromUITraitCollection(traitCollection);
+  asyncTraitCollection.containerSize = self.view.frame.size;
   return asyncTraitCollection;
 }
 
-- (ASEnvironmentTraitCollection)environmentTraitCollectionForWindowSize:(CGSize)windowSize
+- (void)propagateNewTraitCollection:(ASPrimitiveTraitCollection)traitCollection
 {
-  if (self.overrideDisplayTraitsWithWindowSize) {
-    ASTraitCollection *traitCollection = self.overrideDisplayTraitsWithWindowSize(windowSize);
-    self.traitCollectionContext = traitCollection.traitCollectionContext;
-    return [traitCollection environmentTraitCollection];
-  }
-  return self.node.environmentTraitCollection;
-}
-
-- (void)progagateNewEnvironmentTraitCollection:(ASEnvironmentTraitCollection)environmentTraitCollection
-{
-  ASEnvironmentState environmentState = self.node.environmentState;
-  ASEnvironmentTraitCollection oldEnvironmentTraitCollection = environmentState.environmentTraitCollection;
+  ASPrimitiveTraitCollection oldTraitCollection = self.node.primitiveTraitCollection;
   
-  if (ASEnvironmentTraitCollectionIsEqualToASEnvironmentTraitCollection(environmentTraitCollection, oldEnvironmentTraitCollection) == NO) {
-    environmentState.environmentTraitCollection = environmentTraitCollection;
-    self.node.environmentState = environmentState;
-    [self.node setNeedsLayout];
+  if (ASPrimitiveTraitCollectionIsEqualToASPrimitiveTraitCollection(traitCollection, oldTraitCollection) == NO) {
+    self.node.primitiveTraitCollection = traitCollection;
     
-    NSArray<id<ASEnvironment>> *children = [self.node children];
-    for (id<ASEnvironment> child in children) {
-      ASEnvironmentStatePropagateDown(child, environmentState.environmentTraitCollection);
+    NSArray<id<ASLayoutElement>> *children = [self.node sublayoutElements];
+    for (id<ASLayoutElement> child in children) {
+      ASTraitCollectionPropagateDown(child, traitCollection);
     }
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    // Once we've propagated all the traits, layout this node.
+    // Remeasure the node with the latest constrained size – old constrained size may be incorrect.
+    [_node layoutThatFits:[self nodeConstrainedSize]];
+#pragma clang diagnostic pop
   }
 }
 
@@ -250,24 +300,18 @@ ASVisibilityDepthImplementation;
 {
   [super traitCollectionDidChange:previousTraitCollection];
   
-  ASEnvironmentTraitCollection environmentTraitCollection = [self environmentTraitCollectionForUITraitCollection:self.traitCollection];
-  [self progagateNewEnvironmentTraitCollection:environmentTraitCollection];
+  ASPrimitiveTraitCollection traitCollection = [self primitiveTraitCollectionForUITraitCollection:self.traitCollection];
+  traitCollection.containerSize = self.view.bounds.size;
+  [self propagateNewTraitCollection:traitCollection];
 }
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-  [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+  [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
   
-  ASEnvironmentTraitCollection environmentTraitCollection = [self environmentTraitCollectionForUITraitCollection:newCollection];
-  [self progagateNewEnvironmentTraitCollection:environmentTraitCollection];
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-  [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-  
-  ASEnvironmentTraitCollection environmentTraitCollection = [self environmentTraitCollectionForWindowSize:size];
-  [self progagateNewEnvironmentTraitCollection:environmentTraitCollection];
+  ASPrimitiveTraitCollection traitCollection = _node.primitiveTraitCollection;
+  traitCollection.containerSize = self.view.bounds.size;
+  [self propagateNewTraitCollection:traitCollection];
 }
 
 @end

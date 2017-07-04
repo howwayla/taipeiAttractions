@@ -1,18 +1,18 @@
-/*
- *  Copyright (c) 2014-present, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- *
- */
+//
+//  ASTextKitRenderer.h
+//  AsyncDisplayKit
+//
+//  Copyright (c) 2014-present, Facebook, Inc.  All rights reserved.
+//  This source code is licensed under the BSD-style license found in the
+//  LICENSE file in the root directory of this source tree. An additional grant
+//  of patent rights can be found in the PATENTS file in the same directory.
+//
 
 #import <vector>
 
 #import <UIKit/UIKit.h>
 
-#import "ASTextKitAttributes.h"
+#import <AsyncDisplayKit/ASTextKitAttributes.h>
 
 @class ASTextKitContext;
 @class ASTextKitShadower;
@@ -53,7 +53,7 @@
 
 @property (nonatomic, assign, readonly) ASTextKitAttributes attributes;
 
-@property (nonatomic, assign, readwrite) CGSize constrainedSize;
+@property (nonatomic, assign, readonly) CGSize constrainedSize;
 
 @property (nonatomic, assign, readonly) CGFloat currentScaleFactor;
 
@@ -84,6 +84,11 @@
  The number of lines shown in the string.
  */
 - (NSUInteger)lineCount;
+
+/**
+ Whether or not the text is truncated.
+ */
+- (BOOL)isTruncated;
 
 @end
 

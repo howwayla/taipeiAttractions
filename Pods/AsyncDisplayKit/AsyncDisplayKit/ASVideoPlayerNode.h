@@ -3,31 +3,37 @@
 //  AsyncDisplayKit
 //
 //  Created by Erekle on 5/6/16.
-//  Copyright © 2016 Facebook. All rights reserved.
+//
+//  Copyright (c) 2014-present, Facebook, Inc.  All rights reserved.
+//  This source code is licensed under the BSD-style license found in the
+//  LICENSE file in the root directory of this source tree. An additional grant
+//  of patent rights can be found in the PATENTS file in the same directory.
 //
 
 #if TARGET_OS_IOS
-#import <AsyncDisplayKit/AsyncDisplayKit.h>
-//#import <AsyncDisplayKit/ASThread.h>
-//#import <AsyncDisplayKit/ASVideoNode.h>
-//#import <AsyncDisplayKit/ASDisplayNode+Subclasses.h>
+#import <CoreMedia/CoreMedia.h>
+#import <AsyncDisplayKit/ASThread.h>
+#import <AsyncDisplayKit/ASVideoNode.h>
+#import <AsyncDisplayKit/ASDisplayNode+Subclasses.h>
 
 @class AVAsset;
+@class ASButtonNode;
 @protocol ASVideoPlayerNodeDelegate;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, ASVideoPlayerNodeControlType) {
   ASVideoPlayerNodeControlTypePlaybackButton,
   ASVideoPlayerNodeControlTypeElapsedText,
   ASVideoPlayerNodeControlTypeDurationText,
   ASVideoPlayerNodeControlTypeScrubber,
+  ASVideoPlayerNodeControlTypeFullScreenButton,
   ASVideoPlayerNodeControlTypeFlexGrowSpacer,
-} ASVideoPlayerNodeControlType;
+};
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ASVideoPlayerNode : ASDisplayNode
 
-@property (nullable, atomic, weak) id<ASVideoPlayerNodeDelegate> delegate;
+@property (nullable, nonatomic, weak) id<ASVideoPlayerNodeDelegate> delegate;
 
 @property (nonatomic, assign, readonly) CMTime duration;
 
@@ -45,22 +51,27 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readwrite) BOOL muted;
 @property (nonatomic, assign, readonly) ASVideoNodePlayerState playerState;
 @property (nonatomic, assign, readwrite) BOOL shouldAggressivelyRecoverFromStall;
+@property (nullable, nonatomic, strong, readwrite) NSURL *placeholderImageURL;
+@property (nonatomic, strong, readonly) ASVideoNode *videoNode;
 
 //! Defaults to 100
 @property (nonatomic, assign) int32_t periodicTimeObserverTimescale;
 //! Defaults to AVLayerVideoGravityResizeAspect
-@property (atomic) NSString *gravity;
+@property (nonatomic, copy) NSString *gravity;
 
 - (instancetype)initWithUrl:(NSURL*)url;
 - (instancetype)initWithAsset:(AVAsset*)asset;
+- (instancetype)initWithAsset:(AVAsset *)asset videoComposition:(AVVideoComposition *)videoComposition audioMix:(AVAudioMix *)audioMix;
 - (instancetype)initWithUrl:(NSURL *)url loadAssetWhenNodeBecomesVisible:(BOOL)loadAssetWhenNodeBecomesVisible;
 - (instancetype)initWithAsset:(AVAsset *)asset loadAssetWhenNodeBecomesVisible:(BOOL)loadAssetWhenNodeBecomesVisible;
+- (instancetype)initWithAsset:(AVAsset *)asset videoComposition:(AVVideoComposition *)videoComposition audioMix:(AVAudioMix *)audioMix loadAssetWhenNodeBecomesVisible:(BOOL)loadAssetWhenNodeBecomesVisible;
 
 #pragma mark - Public API
 - (void)seekToTime:(CGFloat)percentComplete;
 - (void)play;
 - (void)pause;
 - (BOOL)isPlaying;
+- (void)resetToPlaceholder;
 
 @end
 
@@ -112,9 +123,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Spinner delegate methods
 - (UIColor *)videoPlayerNodeSpinnerTint:(ASVideoPlayerNode *)videoPlayer;
+- (UIActivityIndicatorViewStyle)videoPlayerNodeSpinnerStyle:(ASVideoPlayerNode *)videoPlayer;
 
 #pragma mark - Playback button delegate methods
 - (UIColor *)videoPlayerNodePlaybackButtonTint:(ASVideoPlayerNode *)videoPlayer;
+
+#pragma mark - Fullscreen button delegate methods
+
+- (UIImage *)videoPlayerNodeFullScreenButtonImage:(ASVideoPlayerNode *)videoPlayer;
 
 
 #pragma mark ASVideoNodeDelegate proxy methods
@@ -123,6 +139,13 @@ NS_ASSUME_NONNULL_BEGIN
  * @param videoPlayerNode The ASVideoPlayerNode that was tapped.
  */
 - (void)didTapVideoPlayerNode:(ASVideoPlayerNode *)videoPlayer;
+
+/**
+ * @abstract Delegate method invoked when fullcreen button is taped.
+ * @param buttonNode The fullscreen button node that was tapped.
+ */
+- (void)didTapFullScreenButtonNode:(ASButtonNode *)buttonNode;
+
 /**
  * @abstract Delegate method invoked when ASVideoNode playback time is updated.
  * @param videoPlayerNode The video player node
@@ -151,9 +174,42 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * @abstract Delegate method invoked when the ASVideoNode has played to its end time.
- * @param videoPlayerNode The video node has played to its end time.
+ * @param videoPlayer The video node has played to its end time.
  */
 - (void)videoPlayerNodeDidPlayToEnd:(ASVideoPlayerNode *)videoPlayer;
+
+/**
+ * @abstract Delegate method invoked when the ASVideoNode has constructed its AVPlayerItem for the asset.
+ * @param videoPlayer The video player node.
+ * @param currentItem The AVPlayerItem that was constructed from the asset.
+ */
+- (void)videoPlayerNode:(ASVideoPlayerNode *)videoPlayer didSetCurrentItem:(AVPlayerItem *)currentItem;
+
+/**
+ * @abstract Delegate method invoked when the ASVideoNode stalls.
+ * @param videoPlayer The video player node that has experienced the stall
+ * @param second Current playback time when the stall happens
+ */
+- (void)videoPlayerNode:(ASVideoPlayerNode *)videoPlayer didStallAtTimeInterval:(NSTimeInterval)timeInterval;
+
+/**
+ * @abstract Delegate method invoked when the ASVideoNode starts the inital asset loading
+ * @param videoPlayer The videoPlayer
+ */
+- (void)videoPlayerNodeDidStartInitialLoading:(ASVideoPlayerNode *)videoPlayer;
+
+/**
+ * @abstract Delegate method invoked when the ASVideoNode is done loading the asset and can start the playback
+ * @param videoPlayer The videoPlayer
+ */
+- (void)videoPlayerNodeDidFinishInitialLoading:(ASVideoPlayerNode *)videoPlayer;
+
+/**
+ * @abstract Delegate method invoked when the ASVideoNode has recovered from the stall
+ * @param videoPlayer The videoplayer
+ */
+- (void)videoPlayerNodeDidRecoverFromStall:(ASVideoPlayerNode *)videoPlayer;
+
 
 @end
 NS_ASSUME_NONNULL_END

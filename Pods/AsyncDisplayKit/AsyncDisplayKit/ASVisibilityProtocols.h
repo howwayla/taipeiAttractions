@@ -1,14 +1,19 @@
 //
 //  ASVisibilityProtocols.h
-//  Pods
+//  AsyncDisplayKit
 //
 //  Created by Garrett Moon on 4/27/16.
 //
+//  Copyright (c) 2014-present, Facebook, Inc.  All rights reserved.
+//  This source code is licensed under the BSD-style license found in the
+//  LICENSE file in the root directory of this source tree. An additional grant
+//  of patent rights can be found in the PATENTS file in the same directory.
 //
 
-#import "ASLayoutRangeType.h"
+#import <AsyncDisplayKit/ASBaseDefines.h>
+#import <AsyncDisplayKit/ASLayoutRangeType.h>
 
-#import "ASBaseDefines.h"
+NS_ASSUME_NONNULL_BEGIN
 
 @class UIViewController;
 
@@ -18,10 +23,26 @@ extern ASLayoutRangeMode ASLayoutRangeModeForVisibilityDepth(NSUInteger visibili
 
 ASDISPLAYNODE_EXTERN_C_END
 
+/**
+ * ASVisibilityDepth
+ *
+ * @discussion "Visibility Depth" represents the number of user actions required to make an ASDisplayNode or 
+ * ASViewController visibile. AsyncDisplayKit uses this information to intelligently manage memory and focus
+ * resources where they are most visible to the user.
+ *
+ * The ASVisibilityDepth protocol describes how custom view controllers can integrate with this system.
+ *
+ * Parent view controllers should also implement @c ASManagesChildVisibilityDepth
+ *
+ * @see ASManagesChildVisibilityDepth
+ */
+
 @protocol ASVisibilityDepth <NSObject>
 
 /**
- * @abstract Represents the number of user actions necessary to reach the view controller. An increased visibility
+ * Visibility depth
+ *
+ * @discussion Represents the number of user actions necessary to reach the view controller. An increased visibility
  * depth indicates a higher number of user interactions for the view controller to be visible again. For example,
  * an onscreen navigation controller's top view controller should have a visibility depth of 0. The view controller
  * one from the top should have a visibility deptch of 1 as should the root view controller in the stack (because
@@ -32,10 +53,37 @@ ASDISPLAYNODE_EXTERN_C_END
  */
 - (NSInteger)visibilityDepth;
 
-
+/**
+ * Called when visibility depth changes
+ *
+ * @discussion @c visibilityDepthDidChange is called whenever the visibility depth of the represented view controller
+ * has changed.
+ * 
+ * If implemented by a view controller container, use this method to notify child view controllers that their view
+ * depth has changed @see ASNavigationController.m
+ *
+ * If implemented on an ASViewController, use this method to reduce or increase the resources that your
+ * view controller uses. A higher visibility depth view controller should decrease it's resource usage, a lower
+ * visibility depth controller should pre-warm resources in preperation for a display at 0 depth.
+ *
+ * ASViewController implements this method and reduces / increases range mode of supporting nodes (such as ASCollectionNode
+ * and ASTableNode).
+ *
+ * @see visibilityDepth
+ */
 - (void)visibilityDepthDidChange;
 
 @end
+
+/**
+ * ASManagesChildVisibilityDepth
+ *
+ * @discussion A protocol which should be implemented by container view controllers to allow proper
+ * propagation of visibility depth
+ *
+ * @see ASVisibilityDepth
+ */
+@protocol ASManagesChildVisibilityDepth <ASVisibilityDepth>
 
 /**
  * @abstract Container view controllers should adopt this protocol to indicate that they will manage their child's
@@ -46,8 +94,6 @@ ASDISPLAYNODE_EXTERN_C_END
  *
  * @param childViewController Expected to return the visibility depth of the child view controller.
  */
-@protocol ASManagesChildVisibilityDepth <ASVisibilityDepth>
-
 - (NSInteger)visibilityDepthOfChildViewController:(UIViewController *)childViewController;
 
 @end
@@ -99,5 +145,8 @@ ASDISPLAYNODE_EXTERN_C_END
 - (void)didMoveToParentViewController:(UIViewController *)parent \
 { \
   [super didMoveToParentViewController:parent]; \
+  _parentManagesVisibilityDepth = NO; \
   [self visibilityDepthDidChange]; \
 }
+
+NS_ASSUME_NONNULL_END

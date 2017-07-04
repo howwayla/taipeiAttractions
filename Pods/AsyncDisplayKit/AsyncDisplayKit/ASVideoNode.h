@@ -1,19 +1,19 @@
-/* Copyright (c) 2014-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
+//
+//  ASVideoNode.h
+//  AsyncDisplayKit
+//
+//  Copyright (c) 2014-present, Facebook, Inc.  All rights reserved.
+//  This source code is licensed under the BSD-style license found in the
+//  LICENSE file in the root directory of this source tree. An additional grant
+//  of patent rights can be found in the PATENTS file in the same directory.
+//
 
-#if TARGET_OS_IOS
-#import <AsyncDisplayKit/ASButtonNode.h>
 #import <AsyncDisplayKit/ASNetworkImageNode.h>
 
-@class AVAsset, AVPlayer, AVPlayerItem;
+@class AVAsset, AVPlayer, AVPlayerLayer, AVPlayerItem, AVVideoComposition, AVAudioMix;
 @protocol ASVideoNodeDelegate;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, ASVideoNodePlayerState) {
   ASVideoNodePlayerStateUnknown,
   ASVideoNodePlayerStateInitialLoading,
   ASVideoNodePlayerStateReadyToPlay,
@@ -22,7 +22,7 @@ typedef enum {
   ASVideoNodePlayerStateLoading,
   ASVideoNodePlayerStatePaused,
   ASVideoNodePlayerStateFinished
-} ASVideoNodePlayerState;
+};
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,11 +37,21 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)play;
 - (void)pause;
 - (BOOL)isPlaying;
+- (void)resetToPlaceholder;
 
-@property (nullable, atomic, strong, readwrite) AVAsset *asset;
+@property (nullable, nonatomic, strong, readwrite) AVAsset *asset;
+/**
+ ** @abstract The URL with which the asset was initialized.
+ ** @discussion Setting the URL will override the current asset with a newly created AVURLAsset created from the given URL, and AVAsset *asset will point to that newly created AVURLAsset.  Please don't set both assetURL and asset.
+ ** @return Current URL the asset was initialized or nil if no URL was given.
+ **/
+@property (nullable, nonatomic, strong, readwrite) NSURL *assetURL;
+@property (nullable, nonatomic, strong, readwrite) AVVideoComposition *videoComposition;
+@property (nullable, nonatomic, strong, readwrite) AVAudioMix *audioMix;
 
-@property (nullable, atomic, strong, readonly) AVPlayer *player;
-@property (nullable, atomic, strong, readonly) AVPlayerItem *currentItem;
+@property (nullable, nonatomic, strong, readonly) AVPlayer *player;
+@property (nullable, nonatomic, strong, readonly) AVPlayerLayer *playerLayer;
+@property (nullable, nonatomic, strong, readonly) AVPlayerItem *currentItem;
 
 
 /**
@@ -55,13 +65,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readwrite) BOOL shouldAggressivelyRecoverFromStall;
 
 @property (nonatomic, assign, readonly) ASVideoNodePlayerState playerState;
-//! Defaults to 100
+//! Defaults to 1000
 @property (nonatomic, assign) int32_t periodicTimeObserverTimescale;
 
 //! Defaults to AVLayerVideoGravityResizeAspect
-@property (atomic) NSString *gravity;
+@property (nonatomic, copy) NSString *gravity;
 
-@property (nullable, atomic, weak, readwrite) id<ASVideoNodeDelegate, ASNetworkImageNodeDelegate> delegate;
+@property (nullable, nonatomic, weak, readwrite) id<ASVideoNodeDelegate, ASNetworkImageNodeDelegate> delegate;
 
 @end
 
@@ -120,16 +130,23 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)videoNodeDidFinishInitialLoading:(ASVideoNode *)videoNode;
 /**
+ * @abstract Delegate method invoked when the AVPlayerItem for the asset has been set up and can be accessed throught currentItem.
+ * @param videoNode The videoNode.
+ * @param currentItem The AVPlayerItem that was constructed from the asset.
+ */
+- (void)videoNode:(ASVideoNode *)videoNode didSetCurrentItem:(AVPlayerItem *)currentItem;
+/**
  * @abstract Delegate method invoked when the video node has recovered from the stall
  * @param videoNode The videoNode
  */
 - (void)videoNodeDidRecoverFromStall:(ASVideoNode *)videoNode;
 
-// Below are deprecated methods.  To be removed in ASDK 2.0 release
-- (void)videoPlaybackDidFinish:(ASVideoNode *)videoNode __deprecated;
-- (void)videoNodeWasTapped:(ASVideoNode *)videoNode __deprecated;
-- (void)videoNode:(ASVideoNode *)videoNode didPlayToSecond:(NSTimeInterval)second __deprecated;
+@end
+
+@interface ASVideoNode (Unavailable)
+
+- (instancetype)initWithViewBlock:(ASDisplayNodeViewBlock)viewBlock didLoadBlock:(nullable ASDisplayNodeDidLoadBlock)didLoadBlock __unavailable;
 
 @end
+
 NS_ASSUME_NONNULL_END
-#endif

@@ -11,7 +11,7 @@ import Foundation
 class TAAppDataService {
     
     static let sharedInstance = TAAppDataService()
-    private init() {}
+    fileprivate init() {}
     
     var categories: [String] = []
     
@@ -29,7 +29,7 @@ class TAAppDataService {
     /**
      Setup categories from attractions
      */
-    private func setupCategories() {
+    fileprivate func setupCategories() {
         
         var newCategories: [String] = []
         for category in (attractions.map{ $0.category }) {
@@ -45,7 +45,7 @@ class TAAppDataService {
         self.categories = newCategories
     }
     
-    private func setupAttractionsByCategory() {
+    fileprivate func setupAttractionsByCategory() {
         for category in self.categories {
             let attractions = self.attractions.filter{ $0.category == category }
             self.attractionsByCategory[category] = attractions

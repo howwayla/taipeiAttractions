@@ -66,8 +66,8 @@ class TAAppDateServiceTests: XCTestCase {
 
     func testAppDataServiceCategoriesTest() {
         
-        let attraction1 = TAAttraction(JSON: self.attraction1)
-        let attraction2 = TAAttraction(JSON: self.attraction2)
+        let attraction1 = TAAttraction(JSON: self.attraction1 as JSONDictionary)
+        let attraction2 = TAAttraction(JSON: self.attraction2 as JSONDictionary)
         
         
         TAAppDataService.sharedInstance.attractions = [attraction1, attraction1, attraction2, attraction2]

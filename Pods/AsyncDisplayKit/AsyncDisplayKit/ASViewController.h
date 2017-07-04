@@ -3,7 +3,11 @@
 //  AsyncDisplayKit
 //
 //  Created by Huy Nguyen on 16/09/15.
-//  Copyright (c) 2015 Facebook. All rights reserved.
+//
+//  Copyright (c) 2014-present, Facebook, Inc.  All rights reserved.
+//  This source code is licensed under the BSD-style license found in the
+//  LICENSE file in the root directory of this source tree. An additional grant
+//  of patent rights can be found in the PATENTS file in the same directory.
 //
 
 #import <UIKit/UIKit.h>
@@ -17,23 +21,34 @@ NS_ASSUME_NONNULL_BEGIN
 typedef ASTraitCollection * _Nonnull (^ASDisplayTraitsForTraitCollectionBlock)(UITraitCollection *traitCollection);
 typedef ASTraitCollection * _Nonnull (^ASDisplayTraitsForTraitWindowSizeBlock)(CGSize windowSize);
 
+/**
+ * ASViewController allows you to have a completely node backed hierarchy. It automatically
+ * handles @c ASVisibilityDepth, automatic range mode and propogating @c ASDisplayTraits to contained nodes.
+ *
+ * You can opt-out of node backed hierarchy and use it like a normal UIViewController.
+ * More importantly, you can use it as a base class for all of your view controllers among which some use a node hierarchy and some don't.
+ * See examples/ASDKgram project for actual implementation.
+ */
 @interface ASViewController<__covariant DisplayNodeType : ASDisplayNode *> : UIViewController <ASVisibilityDepth>
 
-- (instancetype)initWithNode:(DisplayNodeType)node NS_DESIGNATED_INITIALIZER;
+/**
+ * ASViewController initializer.
+ *
+ * @param node An ASDisplayNode which will provide the root view (self.view)
+ * @return An ASViewController instance whose root view will be backed by the provided ASDisplayNode.
+ *
+ * @see ASVisibilityDepth
+ */
+- (instancetype)initWithNode:(DisplayNodeType)node;
 
-@property (nonatomic, strong, readonly) DisplayNodeType node;
+NS_ASSUME_NONNULL_END
 
 /**
- *  An optional context to pass along with an ASTraitCollection.
- *  This can be used to pass any internal state to all subnodes via the ASTraitCollection that is not
- *  included in UITraitCollection. This could range from more fine-tuned size classes to a class of
- *  constants that is based upon the new trait collection.
- *
- *  Be aware that internally this context is held by a C struct which cannot retain the pointer. Therefore
- *  ASVC keeps a strong reference to the context to make sure that it stays alive. If you change this value
- *  it will propagate the change to the subnodes.
+ * @return node Returns the ASDisplayNode which provides the backing view to the view controller.
  */
-@property (nonatomic, strong) id _Nullable traitCollectionContext;
+@property (nonatomic, strong, readonly, null_unspecified) DisplayNodeType node;
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * Set this block to customize the ASDisplayTraits returned when the VC transitions to the given traitCollection.
@@ -58,6 +73,21 @@ typedef ASTraitCollection * _Nonnull (^ASDisplayTraitsForTraitWindowSizeBlock)(C
 // Refer to examples/SynchronousConcurrency, AsyncViewController.m
 @property (nonatomic, assign) BOOL neverShowPlaceholders;
 
+@end
+
+@interface ASViewController (ASRangeControllerUpdateRangeProtocol)
+
+/**
+ * Automatically adjust range mode based on view events. If you set this to YES, the view controller or its node
+ * must conform to the ASRangeControllerUpdateRangeProtocol. 
+ *
+ * Default value is YES *if* node or view controller conform to ASRangeControllerUpdateRangeProtocol otherwise it is NO.
+ */
+@property (nonatomic, assign) BOOL automaticallyAdjustRangeModeBasedOnViewEvents;
+
+@end
+
+@interface ASViewController (Deprecated)
 
 /**
  * The constrained size used to measure the backing node.
@@ -66,7 +96,7 @@ typedef ASTraitCollection * _Nonnull (^ASDisplayTraitsForTraitWindowSizeBlock)(C
  * both the min and max definitions. Override this method to provide a custom size range to the
  * backing node.
  */
-- (ASSizeRange)nodeConstrainedSize;
+- (ASSizeRange)nodeConstrainedSize AS_WARN_UNUSED_RESULT ASDISPLAYNODE_DEPRECATED_MSG("Set the size directly to the view's frame");
 
 @end
 
